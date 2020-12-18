@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.Dao.GoodsDao">
+    <select id="findAllDiscountGoods" resultType="Goods">
+        select
+        goods.shopid as 'shopId',
+        goods.price,goods.name,goods.description,goods.picture,goods.number,goods.trademark,
+        goods.validPeriod,goods.Packingspecification,goods.manufacturer,discountgoods.discount,
+        discountgoods.time
+        from goods,discountgoods where goods.shopid = discountgoods.shopid;
+    </select>
+</mapper>
