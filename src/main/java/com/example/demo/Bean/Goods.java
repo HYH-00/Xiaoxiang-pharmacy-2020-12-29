@@ -3,6 +3,7 @@ package com.example.demo.Bean;
 import lombok.Data;
 import lombok.ToString;
 import org.apache.ibatis.type.Alias;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -38,22 +39,6 @@ public class Goods {
     private double discount;
 //    折扣过期时间
     private Date time;
-
-    @Override
-    public String toString() {
-        return "Goods{" +
-                "shopId='" + shopId + '\'' +
-                ", price=" + price +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", picture='" + picture + '\'' +
-                ", number=" + number +
-                ", tradeMake='" + trademark + '\'' +
-                ", validPeriod='" + validPeriod + '\'' +
-                ", packingSpecification='" + packingSpecification + '\'' +
-                ", manufacturer='" + manufacturer + '\'' +
-                ", discount=" + discount +
-                ", time=" + time +
-                '}';
-    }
+//    医药用品类别
+    private String type;
 }
