@@ -53,7 +53,8 @@ function createTag(i) {
 
     Taga.innerHTML = cartList[i].title;
     TagInput2.value = cartList[i].num;
-    TagImg.src = "images/phone" + (cartList[i].id + 1) + ".jpg"
+    TagImg.src = cartList[i].id
+    console.log(cartList[i].id)
     TagDiv[2].innerHTML = "￥" + cartList[i].price;
     TagDiv[0].appendChild(TagInput1);
     TagDiv[0].appendChild(TagImg);

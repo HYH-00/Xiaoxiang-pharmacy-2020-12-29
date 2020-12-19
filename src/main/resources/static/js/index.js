@@ -234,176 +234,176 @@ function changeValue() {
     window.localStorage.setItem("cartlist", strCartList);
 }
 
-
-for (let i = 0; i < addCar.length; i++) {
-
-    addCar[i].addEventListener("click", function () {
-        this.innerHTML = "已添加";
-        this.style.background = "rgb(172, 13, 13)";
-        this.style.color = "#fff";
-        let num = 1;
-        //获取文本
-        let title = this.parentNode.parentNode.querySelector(".detail-title").innerHTML;
-        //获取价格
-        let prices = Number(pri[i].innerHTML.substr(1));
-
-
-        let infor = {
-            "id": i,
-            "title": title,
-            "price": prices,
-            "num": num,
-            "check": 1,
-        };
-        let has = 0;
-
-        //判断是否重复值
-        for (let k = 0; k < cartlist.length; k++) {
-            if (cartlist[k].id == i) {
-                has = 1;
-                num = cartlist[k].num++;
-                break;
-            }
-        }
-        if (has == 0) {
-            cartlist.push(infor);
-        }
-        changeValue();
-    });
-}
-
-
-
-
-function Purchase(a) {
-    this.arr = a.arr;
-    this.startarr = a.startarr;
-    this.box = document.querySelectorAll(a.box);
-    this.clickPuchar = document.querySelectorAll(a.click);
-    this.tagTimes = document.querySelectorAll(a.times);
-    this.valTimes = document.querySelectorAll(a.timesSub);
-    this.valText = document.querySelectorAll(a.end);
-    this.m = [];
-    this.sh = [];
-    var _this = this;
-
-    this.change = function (leftsecond, index, newSta, newArr) {
-        //开始抢购
-
-        if (newSta <= 0) {
-            this.valText[index].innerHTML = "结束";
-            this.clickPuchar[index].innerHTML = "开始抢购";
-
-            //点击抢购事件，如果大于五次就抢完
-            this.clickPuchar[index].onclick = function () {
-                _this.m.push(index);
-                var obj = {};
-                for (let i = 0; i < _this.m.length; i++) {
-                    if (!obj[_this.m[i]]) {
-                        obj[_this.m[i]] = 1;
-                    } else {
-                        obj[_this.m[i]]++
-                    }
-                }
-
-                _this.maxValue = 0; //重复的值
-                _this.maxStr = _this.m[0]; //重复谁的值
-                for (let i in obj) {
-                    if (obj[i] > _this.maxValue) {
-                        _this.maxValue = obj[i];
-                        _this.maxStr = i;
-                    }
-                }
-                if (_this.maxValue >= 5) {
-                    let strTagTime = "已抢光";
-                    let strClickP = "#ccc";
-                    let strBox = "#888";
-                    _this.valChange(_this.maxStr, strTagTime, strClickP, strBox);
-                    clearInterval(this.sh);
-                }
-            }
-        }
-        this.valChange = function (index, str1, str2, str3) {
-            this.tagTimes[index].innerHTML = str1;
-            this.clickPuchar[index].innerHTML = str1;
-            this.box[index].style.cursor = "no-drop";
-            this.clickPuchar[index].style.cursor = "no-drop";
-            this.clickPuchar[index].style.background = str2;
-            this.tagTimes[index].style.background = this.box[index].style.background = str3;
-        }
-        //抢购结束判断
-        if (newArr <= 0) {
-            this.minuts = this.second = this.hour = this.day = 0;
-            let strTagTime = "已结束";
-            let strClickP = "rgb(60, 60, 60)";
-            let strBox = "#ccc";
-            this.valTimes[index].innerHTML = "抢购已结束";
-            this.valChange(index, strTagTime, strClickP, strBox);
-            clearInterval(this.sh);
-        }
+//添加购物车
+// for (let i = 0; i < addCar.length; i++) {
+//
+//     addCar[i].addEventListener("click", function () {
+//         this.innerHTML = "已添加";
+//         this.style.background = "rgb(172, 13, 13)";
+//         this.style.color = "#fff";
+//         let num = 1;
+//         //获取文本
+//         let title = this.parentNode.parentNode.querySelector(".detail-title").innerHTML;
+//         //获取价格
+//         let prices = Number(pri[i].innerHTML.substr(1));
+//
+//
+//         let infor = {
+//             "id": i,
+//             "title": title,
+//             "price": prices,
+//             "num": num,
+//             "check": 1,
+//         };
+//         let has = 0;
+//
+//         //判断是否重复值
+//         for (let k = 0; k < cartlist.length; k++) {
+//             if (cartlist[k].id == i) {
+//                 has = 1;
+//                 num = cartlist[k].num++;
+//                 break;
+//             }
+//         }
+//         if (has == 0) {
+//             cartlist.push(infor);
+//         }
+//         changeValue();
+//     });
+// }
+//
+//
 
 
-    }
-
-    this.Timefresh = function (arr, i, start) {
-        this.nowtime = new Date(); //现在
-        this.starttime = new Date(start); //开始
-        this.endtime = new Date(arr) //结束
-        this.newStart = parseInt((this.starttime.getTime() - this.nowtime.getTime()) /
-            1000); //计算距离抢购开始还有多少秒
-        this.newArr = parseInt((this.endtime.getTime() - this.nowtime.getTime()) /
-            1000); //计算距离抢购结束相差多少秒
-
-        if (this.newStart <= 0) { //已经抢购开始时间，就赋结束时间的值
-            this.temp = this.newArr;
-        } else { //未过开始时间，就赋开始时间的值
-            this.temp = this.newStart;
-        }
-
-        //计算相应的时间
-        this.day = parseInt(this.temp / 3600 / 24); //天数
-        this.hour = parseInt((this.temp / 3600) % 24); //小时
-        this.second = parseInt((this.temp / 60) % 60); //分钟
-        this.minuts = parseInt(this.temp % 60); //秒数
-
-        //输出时间
-        // for (let k = 0; k < this.valTimes.length; k++) {
-        // if (i == k)
-
-        this.valTimes[i].innerHTML = this.day + "天 " + this.hour + "时 " + this.second + "分 " + this
-            .minuts + "秒";
-        // }
-
-        this.change(this.temp, i, this.newStart, this.newArr); //更改相应的文字   
-
-    }
-
-
-    //创建定时器
-    for (let i = 0; i <= this.valTimes.length; i++) {
-        this.sh = setInterval(() => {
-            // console.log(i);   
-            this.Timefresh(this.arr[i], i, this.startarr[i])
-        }, 10);
-
-    }
-}
-var pur = new Purchase({
-    arr: ["2020/01/26,18:45:10", "2020/12/15,18:30:12", "2020/11/11,12:00:52", "2020/06/13,18:00:10",
-        "2020/12/16,10:00:10", "2020/07/11,18:00:00", "2020/12/30,18:02:00", "2020/04/12,18:00:00",
-        "2020/05/12,18:30:00", "2020/03/13,18:10:00", "2020/05/11,12:00:10", "2020/11/13,18:00:00"
-    ],
-    startarr: ["2020/01/24,19:13:00", "2020/12/13,18:00:00", "2020/10/11,12:00:00", "2020/05/13,18:10:00",
-        "2020/12/13,10:00:00", "2020/02/01,18:10:00", "2020/12/17,18:15:00", "2020/03/12,18:00:00",
-        "2020/04/12,11:30:00", "2020/02/13,12:00:52", "2020/04/11,12:02:00", "2020/02/02,18:00:00"
-    ],
-
-    box: [".box"],
-    click: [".click"],
-    times: [".times"],
-    timesSub: [".times-sub"],
-    end: [".end"],
-});
+// function Purchase(a) {
+//     this.arr = a.arr;
+//     this.startarr = a.startarr;
+//     this.box = document.querySelectorAll(a.box);
+//     this.clickPuchar = document.querySelectorAll(a.click);
+//     this.tagTimes = document.querySelectorAll(a.times);
+//     this.valTimes = document.querySelectorAll(a.timesSub);
+//     this.valText = document.querySelectorAll(a.end);
+//     this.m = [];
+//     this.sh = [];
+//     var _this = this;
+//
+//     this.change = function (leftsecond, index, newSta, newArr) {
+//         //开始抢购
+//
+//         if (newSta <= 0) {
+//             this.valText[index].innerHTML = "结束";
+//             this.clickPuchar[index].innerHTML = "开始抢购";
+//
+//             //点击抢购事件，如果大于五次就抢完
+//             this.clickPuchar[index].onclick = function () {
+//                 _this.m.push(index);
+//                 var obj = {};
+//                 for (let i = 0; i < _this.m.length; i++) {
+//                     if (!obj[_this.m[i]]) {
+//                         obj[_this.m[i]] = 1;
+//                     } else {
+//                         obj[_this.m[i]]++
+//                     }
+//                 }
+//
+//                 _this.maxValue = 0; //重复的值
+//                 _this.maxStr = _this.m[0]; //重复谁的值
+//                 for (let i in obj) {
+//                     if (obj[i] > _this.maxValue) {
+//                         _this.maxValue = obj[i];
+//                         _this.maxStr = i;
+//                     }
+//                 }
+//                 if (_this.maxValue >= 5) {
+//                     let strTagTime = "已抢光";
+//                     let strClickP = "#ccc";
+//                     let strBox = "#888";
+//                     _this.valChange(_this.maxStr, strTagTime, strClickP, strBox);
+//                     clearInterval(this.sh);
+//                 }
+//             }
+//         }
+//         this.valChange = function (index, str1, str2, str3) {
+//             this.tagTimes[index].innerHTML = str1;
+//             this.clickPuchar[index].innerHTML = str1;
+//             this.box[index].style.cursor = "no-drop";
+//             this.clickPuchar[index].style.cursor = "no-drop";
+//             this.clickPuchar[index].style.background = str2;
+//             this.tagTimes[index].style.background = this.box[index].style.background = str3;
+//         }
+//         //抢购结束判断
+//         if (newArr <= 0) {
+//             this.minuts = this.second = this.hour = this.day = 0;
+//             let strTagTime = "已结束";
+//             let strClickP = "rgb(60, 60, 60)";
+//             let strBox = "#ccc";
+//             this.valTimes[index].innerHTML = "抢购已结束";
+//             this.valChange(index, strTagTime, strClickP, strBox);
+//             clearInterval(this.sh);
+//         }
+//
+//
+//     }
+//
+//     this.Timefresh = function (arr, i, start) {
+//         this.nowtime = new Date(); //现在
+//         this.starttime = new Date(start); //开始
+//         this.endtime = new Date(arr) //结束
+//         this.newStart = parseInt((this.starttime.getTime() - this.nowtime.getTime()) /
+//             1000); //计算距离抢购开始还有多少秒
+//         this.newArr = parseInt((this.endtime.getTime() - this.nowtime.getTime()) /
+//             1000); //计算距离抢购结束相差多少秒
+//
+//         if (this.newStart <= 0) { //已经抢购开始时间，就赋结束时间的值
+//             this.temp = this.newArr;
+//         } else { //未过开始时间，就赋开始时间的值
+//             this.temp = this.newStart;
+//         }
+//
+//         //计算相应的时间
+//         this.day = parseInt(this.temp / 3600 / 24); //天数
+//         this.hour = parseInt((this.temp / 3600) % 24); //小时
+//         this.second = parseInt((this.temp / 60) % 60); //分钟
+//         this.minuts = parseInt(this.temp % 60); //秒数
+//
+//         //输出时间
+//         // for (let k = 0; k < this.valTimes.length; k++) {
+//         // if (i == k)
+//
+//         this.valTimes[i].innerHTML = this.day + "天 " + this.hour + "时 " + this.second + "分 " + this
+//             .minuts + "秒";
+//         // }
+//
+//         this.change(this.temp, i, this.newStart, this.newArr); //更改相应的文字
+//
+//     }
+//
+//
+//     //创建定时器
+//     for (let i = 0; i <= this.valTimes.length; i++) {
+//         this.sh = setInterval(() => {
+//             // console.log(i);
+//             this.Timefresh(this.arr[i], i, this.startarr[i])
+//         }, 10);
+//
+//     }
+// }
+// var pur = new Purchase({
+//     arr: ["2020/01/26,18:45:10", "2020/12/15,18:30:12", "2020/11/11,12:00:52", "2020/06/13,18:00:10",
+//         "2020/12/16,10:00:10", "2020/07/11,18:00:00", "2020/12/30,18:02:00", "2020/04/12,18:00:00",
+//         "2020/05/12,18:30:00", "2020/03/13,18:10:00", "2020/05/11,12:00:10", "2020/11/13,18:00:00"
+//     ],
+//     startarr: ["2020/01/24,19:13:00", "2020/12/13,18:00:00", "2020/10/11,12:00:00", "2020/05/13,18:10:00",
+//         "2020/12/13,10:00:00", "2020/02/01,18:10:00", "2020/12/17,18:15:00", "2020/03/12,18:00:00",
+//         "2020/04/12,11:30:00", "2020/02/13,12:00:52", "2020/04/11,12:02:00", "2020/02/02,18:00:00"
+//     ],
+//
+//     box: [".box"],
+//     click: [".click"],
+//     times: [".times"],
+//     timesSub: [".times-sub"],
+//     end: [".end"],
+// });
 
 
 
