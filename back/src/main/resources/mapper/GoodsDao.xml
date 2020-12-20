@@ -9,4 +9,11 @@
         discountgoods.time
         from goods,discountgoods where goods.shopid = discountgoods.shopid;
     </select>
+    <select id="findGoodsByType" resultType="Goods">
+        select * from goods where
+            goods.type like #{type};
+    </select>
+    <select id="findGoodsByType1" resultType="Goods">
+        select * from goods;
+    </select>
 </mapper>

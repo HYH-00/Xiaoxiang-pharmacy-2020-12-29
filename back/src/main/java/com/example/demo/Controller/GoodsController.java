@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
@@ -19,11 +20,20 @@ public class GoodsController {
 
     /**
      * 促销打折商品数据接口
+     *
      * @return 商品信息
      */
     @RequestMapping("/allDiscountGoods")
     @ResponseBody
-    public List<Goods> findAllDiscountGoodsController(){
+    public List<Goods> findAllDiscountGoodsController() {
         return goodsService.findAllDiscountGoodsService();
+    }
+
+    @RequestMapping("/findGoods")
+    @ResponseBody
+    public List<Goods> findGoodsByTypeController(@RequestParam("type") String type) {
+        if (type.equals("0"))
+            return goodsService.findGoodsByTypeService();
+        return goodsService.findGoodsByTypeService(type);
     }
 }

@@ -13,4 +13,9 @@ public interface GoodsDao {
      * @return 返回查询的结果
      */
     public List<Goods> findAllDiscountGoods();
+    /**
+     * 查询指定的商品
+     */
+    public List<Goods> findGoodsByType(String type);
+    public List<Goods> findGoodsByType1();
 }

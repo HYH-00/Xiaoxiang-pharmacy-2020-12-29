@@ -38,7 +38,7 @@ function createTag(i) {
     let btn2 = document.createElement("button");
     let Taga = document.createElement("a");
     Tagmain.className = "main-content"
-    Taga.href = "index.html";
+    Taga.title = cartList[i].title;
 
     TagInput1.type = "checkbox";
     TagInput1.className = "check";
@@ -321,68 +321,3 @@ function setChange() {
 }
 
 var usevalue = window.localStorage.getItem("username");
-if (usevalue == null || usevalue.length <= 0) {
-    var timerUser = setInterval(function () {
-        alert("请登录博汇商城，满足你的需求");
-    }, 36000);
-} else {
-    clearInterval(timerUser);
-}
-
-
-
-
-
-
-
-//解析地址，获取数据
-// var loc = location.href;
-// console.log(loc);
-// var n1 = loc.length;
-// var n2 = loc.indexOf("=");
-// var id = decodeURI(loc.substr(n2 + 1, n1 - n2));
-// id = id.split(",");
-// if (id.length > 1) {
-//     for (let i = 0; i < id.length; i++) {
-//         num[id[i]].value = "1";
-//         check[id[i]].checked = "checked";
-//     }
-// }
-
-//初始化-网页加载
-//拿缓存
-// var cartlist = ////.
-// [
-//     {id:5,title:"a",num:1,check:0},
-//     {id:6,title:"a",num:1,check:0},
-//     {id:7,title:"a",num:1,check:0}
-// ]
-
-// carlist = cartlist.filter((item)=>{
-//     if(item.id!=""){
-//         return true
-//     }
-// })
-
-
-//判断缓存
-//showList(datalist)
-//遍历数据
-
-//输出列表
-
-
-//单个删除事件
-// 1、删除DOM标签 2、删除全局数据变量对应的数 3、写缓存 4、计算总价 5、选框判断
-
-//单选
-
-//全选
-
-//批量删除事件
-
-//数量增加
-
-//数量减少
-
-//计算总价

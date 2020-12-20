@@ -1,0 +1,44 @@
+.el-header {
+    background-color: #20C05C;
+    color: #FFFFE5;
+    text-align: center;
+    font-size: larger;
+    line-height: 15px;
+    padding-top: 25px;
+}
+.el-footer {
+    background-color: #B3C0D1;
+    color: #333;
+    text-align: center;
+    line-height: 60px;
+}
+.el-aside {
+    background-color: #FFFFFF;
+    color: #333;
+    line-height:20px;
+    /*width: 500px;*/
+    width: auto;
+    margin-left: 10%;
+}
+
+.el-main {
+    background-color: #E9EEF3;
+    color: #333;
+    width: 500px;
+    margin-right: 10%;
+    /*text-align: center;*/
+    line-height: 0px;
+}
+
+body > .el-container {
+    margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+}
