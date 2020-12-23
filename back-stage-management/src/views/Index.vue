@@ -1,15 +1,14 @@
 <template>
 	<el-container>
-		<button @click="ju"></button>
 		<el-header>
-			<Top v-bind:adminInfo="adminInfo"></Top>
+			<Top @menuSelect="menuSelect_" v-bind:adminInfo="adminInfo"></Top>
 		</el-header>
 		<el-container>
 			<el-aside style="width: auto;">
 				<Side></Side>
 			</el-aside>
 			<el-main>
-				<Main></Main>
+				<component :is="comName" v-bind:userinfo="userinfo"></component>
 			</el-main>
 		</el-container>
 	</el-container>
@@ -19,35 +18,49 @@
 	import Top from '../components/Top.vue'
 	import Main from '../components/Main.vue'
 	import Side from '../components/Side.vue'
+	import Product from '../components/Product.vue'
+	import Order from '../components/Order.vue'
+	import Message from '../components/Message.vue'
+	import User from '../components/User.vue'
 	export default {
 		data() {
 			return {
 				adminInfo: {
-					adminId: this.$route.params.userId,
-					adminPassword: this.$route.params.userPassword,
-					adminNick: this.$route.params.userNickName
+					// adminId: this.$route.params.userId,
+					// adminPwd: this.$route.params.userPassword,
+					// adminNick: this.$route.params.userNickName
+					adminId: '',
+					adminPwd: '',
+					adminNick: ''
 				},
-				comName: 'TreeHole'
+				comName: 'Main'
 			};
 		},
-		mounted(){
-			// this.ju();
+		mounted() {
+			this.get();
 		},
 		methods: {
-			// ju() {
-			// 	alert(this.adminInfo.adminId)
-			// },
-			handleOpen(key, keyPath) {
-				console.log(key, keyPath);
+			get() {
+				this.adminInfo.adminId = sessionStorage.getItem("adminId");
+				this.adminInfo.adminPwd = sessionStorage.getItem("adminPwd");
+				this.adminInfo.adminNick = sessionStorage.getItem("adminNick");
 			},
-			handleClose(key, keyPath) {
-				console.log(key, keyPath);
+			menuSelect_(data) {
+				if (data == "处理中心") this.comName = "Main";
+				else if (data == "商品总览") this.comName = "Product";
+				else if (data == "消息中心") this.comName = "Message";
+				else if (data == "订单管理") this.comName = "Order";
+				else if (data == "用户管理") this.comName = "User";
 			}
 		},
 		components: {
 			Top,
 			Main,
-			Side
+			Side,
+			Product,
+			Order,
+			Message,
+			User
 		}
 	}
 </script>

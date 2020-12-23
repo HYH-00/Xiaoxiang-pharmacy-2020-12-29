@@ -59,7 +59,13 @@
 								if (res.data.nick != "") {
 									thatt.logining = false;
 									// alert(dat.id+" "+dat.pwd);
-									sessionStorage.setItem('user', thatt.ruleForm2.username);
+									
+									// sessionStorage.setItem('user', thatt.ruleForm2.username);
+									sessionStorage.setItem('adminId',dat.id);
+									sessionStorage.setItem('adminPwd',dat.pwd);
+									sessionStorage.setItem('adminNick',dat.nick);
+									
+									
 									thatt.$router.push({
 										name: 'Index',
 										params: {
