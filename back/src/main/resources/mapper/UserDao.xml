@@ -4,7 +4,7 @@
 <!--   订单查询-->
     <resultMap id="allOrder" type="Order">
         <id property="userid" column="userid"/>
-        <result property="shopId" column="shopid"/>
+        <id property="shopId" column="shopid"/>
         <result property="shopnumber" column="shopnumber"/>
         <result property="discount" column="discount"/>
         <result property="address" column="addres"/>
