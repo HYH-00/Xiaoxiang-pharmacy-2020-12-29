@@ -210,7 +210,7 @@ var swiper = new Swiper('.swiper-container-bannerlun', {
 var addCar = document.querySelectorAll(".detail-car");
 var car = document.querySelector(".right").querySelector("a");
 var pri = document.querySelectorAll(".price");
-var numc = document.querySelector(".numc");
+// var numc = document.querySelector(".numc");
 var cartlist = [];
 // localStorage.clear()
 var tmpCartList = window.localStorage.getItem("cartlist");
@@ -220,7 +220,6 @@ var tmpCartList = window.localStorage.getItem("cartlist");
 if (tmpCartList) {
     tmpCartList = JSON.parse(tmpCartList);
     cartlist = tmpCartList;
-    numc.innerHTML = cartlist.length;
     changeValue();
 }
 
@@ -228,7 +227,7 @@ if (tmpCartList) {
 
 //写入缓存
 function changeValue() {
-    numc.innerHTML = cartlist.length;
+    // numc.innerHTML = cartlist.length;
     let strCartList = JSON.stringify(cartlist);
     window.localStorage.setItem("cartlist", strCartList);
 }

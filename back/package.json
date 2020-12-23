@@ -1,0 +1,8 @@
+{
+  "name": "back",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "element-china-area-data": "^5.0.2"
+  }
+}

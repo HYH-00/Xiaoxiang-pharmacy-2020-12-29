@@ -2,6 +2,7 @@ package com.example.demo.Dao;
 
 
 import com.example.demo.Bean.Goods;
+import com.example.demo.Bean.Order;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -18,4 +19,11 @@ public interface GoodsDao {
      */
     public List<Goods> findGoodsByType(String type);
     public List<Goods> findGoodsByType1();
+
+    /**
+     * 用于查询指定id的商品详细信息
+     * @param shopId  商品id
+     * @return 返回数据的
+     */
+    public List<Goods> findGoodDetailedById(String shopId);
 }

@@ -29,11 +29,21 @@ public class GoodsController {
         return goodsService.findAllDiscountGoodsService();
     }
 
+    /**
+     * 找到指定属性（type）的商品
+     * @param type 类型
+     * @return 返回数据
+     */
     @RequestMapping("/findGoods")
     @ResponseBody
     public List<Goods> findGoodsByTypeController(@RequestParam("type") String type) {
         if (type.equals("0"))
             return goodsService.findGoodsByTypeService();
         return goodsService.findGoodsByTypeService(type);
+    }
+    @RequestMapping("/findDetailedGoods")
+    @ResponseBody
+    public List<Goods> findGoodDetailedByIdController(@RequestParam("id") String shopId){
+        return goodsService.findGoodDetailedByIdService(shopId);
     }
 }

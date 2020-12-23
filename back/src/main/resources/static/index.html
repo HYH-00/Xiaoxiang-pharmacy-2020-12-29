@@ -98,8 +98,8 @@
     <ul class="wrap1">
         <li><a href="my.html"><span class="iconfont icon-ren-copy"></span></a></li>
         <li><a href="cart.html"><span class="iconfont icon-gouwuche2"></span><span>购物车<b
-                class="numc">{{num}}</b></span></a></li>
-        <li><a href="shop.html"><span class="iconfont icon-shouhou1"></span><span>售后服务</span></a></li>
+                class="numc"><div id="ap">{{nu}}</div></b></span></a></li>
+        <li><a href="userOrder.html"><span class="iconfont icon-shouhou1"></span><span>订单管理</span></a></li>
     </ul>
 </div>
 <!-- logo 搜索 -->
@@ -137,7 +137,7 @@
                         <div class="left-hid-s">
                             <p><a href="shop.html"><b>肠胃用药</b></a></p>
                             <ul class="hid-box">
-                                <li><a href="index.html"> 胃炎</a></li>
+                                <li><a onclick="queryShop('胃炎')"> 胃炎</a></li>
                                 <li><a href="shop.html"> 胃溃疡</a></li>
                                 <li><a href="shop.html"> 急性肠炎</a></li>
                                 <li><a href="shop.html"> 十二指肠溃疡</a></li>
@@ -522,14 +522,14 @@
 
     </div>
 </section>
-
+<!--折扣商品-->
 <div id="test" v-if="!discountOrOrdinary">
 <div class="main-tit">—— <b>折扣商品推荐</b>——</div>
 <section class="section3">
     <ul class="rush-list" v-for="(data,key) in discountData" v-if="key%3==0">
         <li class="rush-item" v-if="data!=null">
             <div class="shadow">
-                <div class="sec3-img"><img :src="discountData[key].picture"/></div>
+                <div class="sec3-img" @click="Jump(discountData[key].shopId)"><img :src="discountData[key].picture"/></div>
                 <div class="info">
                     <h3 :title="discountData[key].name">{{discountData[key].name}}</h3>
                     <p :title="discountData[key].description">{{discountData[key].description}}</p>
@@ -543,7 +543,7 @@
         </li>
         <li class="rush-item" v-if="discountData[key+1]!=null">
             <div class="shadow">
-                <div class="sec3-img"><img :src="discountData[key+1].picture"/></div>
+                <div class="sec3-img"  @click="Jump(discountData[key+1].shopId)"><img :src="discountData[key+1].picture"/></div>
                 <div class="info">
                     <h3 :title="discountData[key+1].name">{{discountData[key+1].name}}</h3>
                     <p :title="discountData[key+1].description">{{discountData[key+1].description}}</p>
@@ -557,7 +557,7 @@
         </li>
         <li class="rush-item" v-if="discountData[key+2]!=null">
             <div class="shadow">
-                <div class="sec3-img"><img :src="discountData[key+2].picture"/></div>
+                <div class="sec3-img"  @click="Jump(discountData[key+2].shopId)"><img :src="discountData[key+2].picture"/></div>
                 <div class="info">
                     <h3 :title="discountData[key+2].name">{{discountData[key+2].name}}</h3>
                     <p :title="discountData[key+2].description">{{discountData[key+2].description}}</p>
@@ -573,11 +573,11 @@
 </section>
 </div>
 <!--推荐商品-->
-<div id="recommend">
+<div id="recommend" name="recommend">
 <div class="main-tit">—— <b>推荐商品</b>——</div>
 <ul class="wrap shopwrap" v-for="(data,key) in goodsData" v-if="key%2 == 0">
     <li class="main">
-        <a href="shop.html"><img :src="goodsData[key].picture"></a>
+        <img :src="goodsData[key].picture" @click="Jump(goodsData[key].shopId)">
         <div class="main-detail">
             <div class="detail-title">
                 【{{goodsData[key].name}}】<br>
@@ -589,11 +589,11 @@
         </div>
     </li>
     <li class="main">
-        <a href="shop.html"><img :src="goodsData[key+1].picture"></a>
+        <img :src="goodsData[key+1].picture" @click="Jump(goodsData[key+1].shopId)">
         <div class="main-detail">
             <div class="detail-title">
                 【{{goodsData[key+1].name}}】<br>
-                <font color="red" :title="goodsData[key].description">{{goodsData[key+1].description}}</font>
+                <font color="red" :title="goodsData[key+1].description">{{goodsData[key+1].description}}</font>
             </div>
             <div class="detail-price"><b class="price">￥{{goodsData[key+1].price}}</b class="price">
                 <div class="detail-car">加入购物车</div>
@@ -617,19 +617,31 @@
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
 <script>
     var i=0;
     //创建一个购物车缓存区
     var tmpCartList = window.localStorage.getItem("cartlist");
+    tmpCartList = JSON.parse(tmpCartList)
     //折扣物品预购买
     var discountShopList=[]
     //用于购物车
     var shopcar = new Vue({
-        el:"#shopcar",
+        el:"#ap",
         data: {
-            num:0
+            nu:tmpCartList.length
         }
     })
+    //查询指定
+    function queryShop(type){
+        location.href="#recommend"
+        recommendData.recommendGoodsData(type)
+    }
+    //url拼接跳转
+    function JumpProduct(data){
+        url = "ProductShowcase.html?shopId="+data//此处拼接内容
+        window.location.href = url;
+    }
     //公共的写入缓存函数
     function writeCache() {
         let strCartList = JSON.stringify(discountShopList);
@@ -654,7 +666,9 @@
                     console.log(data.data)
                 })
             },
-
+            Jump:function (data) {
+                JumpProduct(data)
+            }
         }
     })
     //用于商品
@@ -701,10 +715,14 @@
                 if(!flag){
                     info.number=1;
                     discountShopList.push(info);
-                    shopcar.num++;
+                    shopcar.nu++;
+                    console.log(shopcar.nu)
                 }
                 //数据更新以后写入缓存
                 writeCache()
+            },
+            Jump:function (data) {
+                JumpProduct(data)
             }
         }
     })
