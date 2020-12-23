@@ -26,4 +26,8 @@ public class GoodsService {
     public List<Goods> findGoodsByTypeService(){
         return path.addGoodsImagesPath(goodsDao.findGoodsByType1());
     }
+    public List<Goods> findGoodDetailedByIdService(String shopId){
+        return path.addGoodsImagesPath(goodsDao.findGoodDetailedById(shopId));
+    }
+
 }

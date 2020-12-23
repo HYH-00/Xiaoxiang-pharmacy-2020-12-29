@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.demo.Dao.GoodsDao">
+    <resultMap id="GoodDetailed" type="Goods">
+        <id property="shopId" column="shopId"/>
+        <result property="price" column="price"/>
+        <result property="name" column="name"/>
+        <result property="description" column="description"/>
+        <result property="picture" column="picture"/>
+        <result property="number" column="number"/>
+        <result property="trademark" column="trademark"/>
+        <result property="validPeriod" column="validPeriod"/>
+        <result property="packingSpecification" column="Packingspecification"/>
+        <result property="manufacturer" column="manufacturer"/>
+        <result property="type" column="type"/>
+        <collection property="goodsDetailed" ofType="GoodsDetailed">
+            <id property="shopId" column="pid"/>
+            <result property="AdverseReactions" column="AdverseReactions"/>
+            <result property="Contraindications" column="Contraindications"/>
+            <result property="Dosage" column="Dosage"/>
+            <result property="ExecutiveStandard" column="ExecutiveStandard"/>
+            <result property="FunctionCategory" column="FunctionCategory"/>
+            <result property="Indications" column="Indications"/>
+            <result property="medicineInteractions" column="medicineInteractions"/>
+            <result property="PharmacologyAndToxicology" column="PharmacologyAndToxicology"/>
+            <result property="Store" column="Store"/>
+            <result property="Traits" column="Traits"/>
+        </collection>
+    </resultMap>
     <select id="findAllDiscountGoods" resultType="Goods">
         select
         goods.shopid as 'shopId',
@@ -15,5 +41,17 @@
     </select>
     <select id="findGoodsByType1" resultType="Goods">
         select * from goods;
+    </select>
+    <select id="findGoodDetailedById" resultMap="GoodDetailed">
+        select goods.*,goodsdetails.shopId as pid,
+        goodsdetails.AdverseReactions,goodsdetails.Contraindications,
+        goodsdetails.Dosage,goodsdetails.ExecutiveStandard,goodsdetails.FunctionCategory,
+        goodsdetails.Indications,goodsdetails.medicineInteractions,goodsdetails.PharmacologyAndToxicology,
+        goodsdetails.Store,goodsdetails.Traits
+        from goods,goodsdetails
+        where
+        goods.shopid=#{shopId}
+        AND
+        goods.shopid=goodsdetails.shopid;
     </select>
 </mapper>

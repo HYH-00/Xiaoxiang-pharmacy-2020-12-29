@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户订单</title>
+    <link href="http://at.alicdn.com/t/font_1524886_uvkjm364bi.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="css/userOrder.css">
+</head>
+<body>
+
+<div id="order">
+    <el-container>
+        <el-header>
+            <div  style="margin-top: 20px;color: #F8F8F8;width: 20%">
+            <el-page-header @back="goBack" content="用户订单"></el-page-header>
+            </div>
+        </el-header>
+        <div style="margin-top: 10px;text-align: right">
+            <el-select v-model="value"
+                       clearable
+                       filterable
+                       allow-create
+                       default-first-option
+                       placeholder="请选择" size="small" style="width: 130px">
+                <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                </el-option>
+            </el-select>
+            <el-button type="primary" plain size="small">搜索</el-button>
+        </div>
+        <el-main>
+            <el-table
+                    :header-cell-style="{background:'#E9E9EB'}"
+                    :data="tableData"
+                    :row-class-name="tableRowClassName"
+                    style="width: 100%">
+                <el-table-column type="expand">
+                    <template slot-scope="props">
+                        <el-form label-position="left" inline class="demo-table-expand">
+                            <el-form-item label="批准文号">
+                                <span>{{ props.row.shopId }}</span>
+                            </el-form-item>
+                            <el-form-item label="商标">
+                                <span>{{ props.row.goods.trademark }}</span>
+                            </el-form-item>
+                            <el-form-item label="生产公司">
+                                <span>{{ props.row.goods.manufacturer }}</span>
+                            </el-form-item>
+                            <el-form-item label="包装规格">
+                                <span>{{ props.row.goods.packingSpecification }}</span>
+                            </el-form-item>
+                            <el-form-item label="商品类别">
+                                <span>{{ props.row.goods.type }}</span>
+                            </el-form-item>
+                            <el-form-item label="保质期">
+                                <span>{{ props.row.goods.validPeriod }}</span>
+                            </el-form-item>
+                            <el-form-item label="执行标准">
+                                <span>{{  props.row.goods.goodsDetailed[0].executiveStandard}}</span>
+                            </el-form-item>
+                            <el-form-item label="功能类型">
+                                <span>{{  props.row.goods.goodsDetailed[0].functionCategory}}</span>
+                            </el-form-item>
+                        </el-form>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="商品图片"
+                        width="180">
+                    <template slot-scope="scope">
+                        <el-popover placement="top-start" title="商品图片" trigger="hover">
+                        <img slot="reference" :src="scope.row.goods.picture" style="width: 150px;height: 110px">
+                        <img :src="scope.row.goods.picture" alt="" style="width:100%;height: 100%">
+                        </el-popover>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        prop="time"
+                        label="下单时间"
+                        width="110">
+                </el-table-column>
+                <el-table-column label="订单信息">
+                    <el-table-column
+                            prop="goods.name"
+                            label="商品名称"
+                            width="150">
+                    </el-table-column>
+                    <el-table-column label="商品信息">
+                        <el-table-column
+                                prop="discount"
+                                label="折扣"
+                                width="100">
+                        </el-table-column>
+                        <el-table-column
+                                prop="shopnumber"
+                                label="商品数量"
+                                width="120">
+                        </el-table-column>
+                        <el-table-column
+                                prop="address"
+                                label="地址"
+                                width="280">
+                        </el-table-column>
+                        <el-table-column
+                                prop="allprice"
+                                label="总价"
+                                width="80">
+                        </el-table-column>
+                    </el-table-column>
+                </el-table-column>
+                <el-table-column
+                        prop="cancel"
+                        label="是否收货"
+                        width="90">
+                </el-table-column>
+                <el-table-column label="操作">
+                    <template slot-scope="scope">
+                        <el-button
+                                size="mini"
+                                v-bind:disabled="dis"
+                                type="primary"
+                                @click="handleEdit(scope.$index, scope.row)">修改地址</el-button>
+                        <el-button
+                                size="mini"
+                                v-bind:disabled="dis"
+                                type="success"
+                                @click="handleConfirm(scope.$index, scope.row)">确认到货</el-button>
+                        <el-button
+                                size="mini"
+                                v-bind:disabled="dis"
+                                type="danger"
+                                @click="handleDelete(scope.$index, scope.row)">取消订单</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-main>
+        <div style="text-align: right">
+        <el-pagination
+                background
+                layout="prev, pager, next"
+                size="2"
+                :total="1000">
+        </el-pagination>
+        </div>
+    </el-container>
+<!--    弹窗-->
+    <el-dialog title="收货地址" :visible.sync="dialogFormVisible" width="30%">
+        <el-form :model="form">
+            <el-form-item label="地区" :label-width="formLabelWidth">
+                <el-select v-model="form.area" placeholder="请选择活动区域">
+                    <el-option label="北京" value="北京省"></el-option>
+                    <el-option label="湖南" value="湖南省"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item label="详细地址" :label-width="formLabelWidth">
+                <el-input v-model="form.address" autocomplete="off"></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="modifyAddress()">确 定</el-button>
+        </div>
+    </el-dialog>
+</div>
+<script src="js/jquery-3.4.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    var a = new Vue({
+        el:"#order",
+        data:{
+            dialogFormVisible:false,
+            form: {
+                address: '',
+                area: '',
+                index:'',
+                row:''
+            },
+            dis:true,
+            formLabelWidth: '120px',
+            tableData: [],
+            options: [],
+            value: ''
+        },
+        mounted: async function () {
+            //判断是否已经登录，在缓存中获取
+            //根据用户ID获取所有订单数据，依据分页实现
+            //模拟用户‘洵哥喜欢短头发小姐姐’
+            await this.findOrder(1,"洵哥喜欢短头发小姐姐","无",true)
+        },
+        methods:{
+            //区分是否到货
+            tableRowClassName({row, rowIndex}) {
+                if(row.cancel=="已到货") {
+                    this.dis=true
+                    return 'warning-row'
+                }
+                this.dis=false
+                return 'success-row'
+            },
+            //确认到货
+            handleConfirm:function(index,row){
+                this.tableData[index].cancel = "已到货"
+                var that = this
+                axios.get("http://localhost:8080/shop/modifyAddress",{
+                    params:{
+                        "userid":that.tableData[index].userid,
+                        "shopid":that.tableData[index].shopId,
+                        "address":"air",
+                        "cancel":that.tableData[index].cancel
+                    }
+                })
+            },
+            //修改地址
+            modifyAddress:function(){
+                var that = this
+                this.tableData[this.form.index].address = this.form.area+this.form.address
+                axios.get("http://localhost:8080/shop/modifyAddress",{
+                    params:{
+                        "userid":that.tableData[that.form.index].userid,
+                        "shopid":that.tableData[that.form.index].shopId,
+                        "address":that.form.area+that.form.address,
+                        "cancel":"air"
+                    }
+                })
+                this.dialogFormVisible = false
+            },
+            //返回上一级界面
+            goBack:function () {
+                window.location.href = "index.html"
+            },
+            handleEdit:function (index,row){
+                this.form.index = index
+                this.form.row = row
+                this.dialogFormVisible=true
+            },
+            findOrder:async function (page,userId,condition,init){
+                var that = this
+                if(init){
+                    await axios.get("http://localhost:8080/shop/queryOrder",{
+                        params:{
+                            "page":page,
+                            "userId":userId,
+                            "condition":condition
+                        }
+                    })
+                    .then(function (data){
+                        console.log(data.data)
+                        that.tableData = data.data
+                    })
+                }else{
+                    axios.get("http://localhost:8080/shop/queryOrder",{
+                        params:{
+                            "page":page,
+                            "userId":userId,
+                            "condition":condition
+                        }
+                    })
+                    .then(function (data){
+                            console.log(data.data)
+                     })
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

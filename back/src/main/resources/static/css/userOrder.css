@@ -1,0 +1,60 @@
+.el-header, .el-footer {
+    background-color: #1bac05;
+    color: #333;
+    text-align: center;
+    line-height: 0px;
+}
+
+.el-aside {
+    background-color: #D3DCE6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+}
+
+.el-main {
+    background-color: white;
+    color: #f7cd7a;
+    line-height: 5px;
+    /*text-align: center;*/
+}
+
+body > .el-container {
+    margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+}
+.iconfont {
+    background: rgb(254, 169, 17);
+    color: #fff;
+    width: 60px;
+    line-height: 60px;
+    font-size: 40px;
+    border-radius: 30px;
+    text-align: center;
+}
+.demo-table-expand {
+    font-size: 0;
+}
+.demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+}
+.demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+}
+.el-table .warning-row {
+    background: oldlace;
+}
+.el-table .success-row {
+    background: #f0f9eb;
+}

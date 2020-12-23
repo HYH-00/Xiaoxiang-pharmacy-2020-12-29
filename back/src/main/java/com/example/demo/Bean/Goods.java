@@ -7,6 +7,7 @@ import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用于保存商品的属性类
@@ -41,4 +42,6 @@ public class Goods {
     private Date time;
 //    医药用品类别
     private String type;
+//    详细信息
+    private List<GoodsDetailed> goodsDetailed;
 }

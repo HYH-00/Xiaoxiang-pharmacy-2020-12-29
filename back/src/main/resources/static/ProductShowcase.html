@@ -4,78 +4,247 @@
     <meta charset="UTF-8">
     <title>商品展示</title>
     <!-- 引入样式 -->
+    <link href="css/index.css" rel="stylesheet">
+    <link href="http://at.alicdn.com/t/font_1524886_uvkjm364bi.css" rel="stylesheet">
+    <link href="css/public.css" rel="stylesheet">
+    <link href="css/swiper.min.css" rel="stylesheet">
+    <script src="js/jquery-3.4.1.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <link href="css/ProductShowcase.css" rel="stylesheet">
 </head>
 <body>
-<div id="aa" style="background: #F8F8F8">
-<el-container>
-    <el-header>
-        <div>
-            <font style="color: #F8F8F8;">详细商品介绍</font>
-            <div style="text-align: right;padding-right: 0">
-                <el-link href="https://element.eleme.io" target="_blank">登录</el-link>/
-                <el-link href="https://element.eleme.io" target="_blank">注册</el-link>
-            </div>
-        </div>
-    </el-header>
+<div class="right" id="shopcar">
+    <ul class="wrap1">
+        <li><a href="my.html"><span class="iconfont icon-ren-copy"></span></a></li>
+        <li><a href="cart.html"><span class="iconfont icon-gouwuche2"></span><span>购物车<b
+                class="numc">{{num}}</b></span></a></li>
+        <li><a href="shop.html"><span class="iconfont icon-shouhou1"></span><span>售后服务</span></a></li>
+    </ul>
+</div>
+<div id="aa" style="background: #F8F8F8" v-for="QueryGoodsData in QueryGoodsDatas">
     <el-container>
-        <el-aside width="24%">
-            <img src="images/buy (1).jpg" style="width: 280px;height: 250px"/><br><br>
-            <div style="background: #FFFFEE"><font style="font-size: small;color: #C4AF66">郑重声明：商品包装因厂家频繁更换，如有不符请以实物为准。</font></div>
-            <img src="images/图标1.png" style="width: 300px;height: 30px;margin-left: 27px"/><br>
-<!--            添加药描述-->
-            <font style="font-size: small;color: #999999">温馨提示：<br>
-                1、商品图片信息展示仅供参考，最终包装以商品实物为准。<br>
-                2、说明书内容仅供查阅参考，最终以商品包装内说明书为准。<br>
-                3、使用商品时，请仔细阅读说明书，并按说明书使用！<br>
-                4、药品请按说明书或在医师或药师指导下购买和使用！<br>
-                5、医疗器械产品请仔细阅读产品说明书或者在医务人员的指导下购买和使用，禁忌内容或者注意事项详见说明书！<br>
-                6、保健食品不能代替药物！
-            </font>
-        </el-aside>
+        <el-header>
+            <div>
+                <font style="color: #F8F8F8; margin-left: 48%">{{QueryGoodsData.name}}介绍</font>
+                <div style="text-align: right;padding-right: 0">
+                    <el-link href="https://element.eleme.io" target="_blank">登录</el-link>
+                    /
+                    <el-link href="https://element.eleme.io" target="_blank">注册</el-link>
+                </div>
+            </div>
+        </el-header>
         <el-container>
-            <el-main>
-                <p style="color: #333333;font-size: larger">商品名称</p><br>
-                <div>
-                    <font>通 用 名</font>&nbsp;&nbsp;商品名
-                    <div style="text-align: right">
-                        <font>商标</font>&nbsp;&nbsp;商标
-                    </div>
+            <el-aside width="25%">
+                <img :src="QueryGoodsData.picture" style="width: 280px;height: 250px;margin-left: 50px"/><br><br>
+                <div style="background: #FFFFEE"><font style="font-size: small;color: #C4AF66">郑重声明：商品包装因厂家频繁更换，如有不符请以实物为准。</font>
                 </div>
-                <el-divider></el-divider>
-                <div>
-                    <font>包装规格</font>&nbsp;&nbsp;包装规格2
+                <img src="images/图标1.png" style="width: 300px;height: 30px;margin-left: 27px"/><br>
+                <!--            添加药描述-->
+                <font style="font-size: small;color: #999999">温馨提示：<br>
+                    1、商品图片信息展示仅供参考，最终包装以商品实物为准。<br>
+                    2、说明书内容仅供查阅参考，最终以商品包装内说明书为准。<br>
+                    3、使用商品时，请仔细阅读说明书，并按说明书使用！<br>
+                    4、药品请按说明书或在医师或药师指导下购买和使用！<br>
+                    5、医疗器械产品请仔细阅读产品说明书或者在医务人员的指导下购买和使用，禁忌内容或者注意事项详见说明书！<br>
+                    6、保健食品不能代替药物！
+                </font>
+            </el-aside>
+            <el-container>
+                <el-main>
+                    <p style="color: #333333;font-size: larger">{{QueryGoodsData.name}}</p>
+                    <span>
+                    <br><br>
+                    <font>通 用 名</font>&nbsp;&nbsp;{{QueryGoodsData.name}}
                     <div style="text-align: right">
-                        <font>剂型/型号</font>&nbsp;&nbsp;商标
+                        <font style="text-align: right">商标</font>&nbsp;&nbsp;{{QueryGoodsData.trademark}}
                     </div>
-                </div>
-                <el-divider></el-divider>
-                <div>
-                    <font>生产企业</font>&nbsp;&nbsp;商品名
-                    <div style="text-align: right">
-                        <font>批准文号</font>&nbsp;&nbsp;商标
+                </span>
+                    <el-divider></el-divider>
+                    <div>
+                        <font>包装规格</font>&nbsp;&nbsp;{{QueryGoodsData.packingSpecification}}
+                        <div style="text-align: right">
+                            <font>所属类型</font>&nbsp;&nbsp;{{QueryGoodsData.type}}
+                        </div>
                     </div>
-                </div>
-                <el-divider></el-divider>
-
-            </el-main>
+                    <el-divider></el-divider>
+                    <div>
+                        <font>生产企业</font>&nbsp;&nbsp;{{QueryGoodsData.manufacturer}}
+                        <div style="text-align: right">
+                            <font>批准文号</font>&nbsp;&nbsp;{{QueryGoodsData.shopId}}
+                        </div>
+                    </div>
+                    <el-divider></el-divider>
+                    需求数量
+                    <el-input-number size="mini" v-model="num4" :min="1"></el-input-number>&nbsp;库存：{{QueryGoodsData.number}}盒 有效期：{{QueryGoodsData.validPeriod}}
+                    <p><br></p>
+                    <div align="right">
+                        <font style="font-size: larger;color: red ">单价 -->> {{QueryGoodsData.price}}</font><br>
+                    </div>
+                    <div align="right">
+                        <el-button type="danger"  @click="PurchaseItems(QueryGoodsData,0)">立即购买</el-button>
+                        <el-button type="danger" plain @click="PurchaseItems(QueryGoodsData,1)">加入购物车</el-button>
+                    </div>
+                </el-main>
+            </el-container>
         </el-container>
+        <el-footer>
+            <div style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);background: #EEFAF4">
+                <font color="red"> ---商品详细说明---</font>
+                <div style="align-items: center;margin-left: 25%">
+                    <table border="1">
+                        <tr>
+                            <td style="background: #F5F5F5">【执行标准】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].executiveStandard}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【性状】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].traits}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【作用类别】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].functionCategory}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【药理毒理】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].pharmacologyAndToxicology}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【适应症】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].indications}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【用法用量】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].dosage}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【不良反应】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].adverseReactions}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【禁忌症】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].contraindications}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【药物相互作用】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].medicineInteractions}}</td>
+                        </tr>
+                        <tr>
+                            <td style="background: #F5F5F5">【贮藏】</td>
+                            <td style="width: 600px">{{QueryGoodsData.goodsDetailed[0].store}}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <footer>
+                Copyright ©2020 版权所有@给把橙枪行不行小组<br>
+                本网站用于课程设计不可直接使用，如执意使用概不负责！！！
+            </footer>
+        </el-footer>
     </el-container>
-    <el-footer>Footer</el-footer>
-</el-container>
 </div>
 </body>
+<script src="js/swiper.min.js"></script>
+<script src="js/index.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    var peopleExcle = new Vue({
-        el:'#aa',
-        data:{}
+<!--    获取商品缓存区-->
+     var Storage = window.localStorage.getItem("cartlist")
+     var discountShopList=[]
+//公共的写入缓存函数
+    function writeCache() {
+    let strCartList = JSON.stringify(discountShopList);
+    window.localStorage.setItem("cartlist", strCartList);
+}
+    <!--    利用正则表达式获取URL参数-->
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    //购物车
+    var shopCar = new Vue({
+        el:"#shopcar",
+        data: {
+            num:0
+        }
 
     })
-
+    var peopleExcle = new Vue({
+        el: '#aa',
+        data: {
+            num4: 1,
+            QueryGoodsDatas:{}
+        },
+        mounted: async function () {
+            var a = GetQueryString("shopId")
+            //获取缓存数据
+            var tmpCartList = JSON.parse(Storage)
+            shopCar.num = tmpCartList.length
+            await this.findShopData(a)
+        },
+        methods:{
+            findShopData: async function (id) {
+                var that = this
+                 await axios.get("http://localhost:8080/shop/findDetailedGoods",{
+                     params:{
+                         "id":id
+                     }
+                 })
+                .then(function (data) {
+                    console.log(data.data)
+                    that.QueryGoodsDatas = data.data
+                })
+            },
+            PurchaseItems: function (data,flag1){
+                Storage = JSON.parse(Storage)
+                discountShopList = Storage
+                data.number = data.number - this.num4
+                // data.number--;
+                var info = {
+                    "id":data.picture,
+                    "name":data.name,
+                    //"price":data.picture,
+                    "title":data.name+" "+data.description+" 批号："+data.shopId,
+                    "num":this.num4,
+                    "price":data.price,
+                    "check": 1,
+                }
+                var flag=0;
+                //查询是否已经购买，如已经购买则仅仅需要数量加一，没有则添加
+                for(var i=0;i<discountShopList.length;i++){
+                    if(discountShopList[i].name==data.name){
+                        discountShopList[i].num++;
+                        flag=1;
+                        continue;
+                    }
+                }
+                if(!flag){
+                    info.number=1;
+                    discountShopList.push(info);
+                    shopCar.num++;
+                    console.log(shopCar.num)
+                }
+                //数据更新以后写入缓存
+                writeCache()
+                if(!flag1)
+                    window.location.href = "cart.html"
+                else
+                    this.open1()
+            },
+            open1:function () {
+                this.$notify({
+                    title: '成功',
+                    message: '添加购物车成功',
+                    type: 'success',
+                    duration: 2000,
+                    position: 'bottom-right'
+                });
+            },
+        }
+    })
 </script>
 </html>

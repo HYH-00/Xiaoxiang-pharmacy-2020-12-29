@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.Dao.UserDao">
+<!--   订单查询-->
+    <resultMap id="allOrder" type="Order">
+        <id property="userid" column="userid"/>
+        <result property="shopId" column="shopid"/>
+        <result property="shopnumber" column="shopnumber"/>
+        <result property="discount" column="discount"/>
+        <result property="address" column="addres"/>
+        <result property="time" column="time"/>
+        <result property="allprice" column="allprice"/>
+        <result property="cancel" column="cancel"/>
+        <association property="goods" javaType="Goods">
+            <id property="shopId" column="shopId"/>
+            <result property="price" column="price"/>
+            <result property="name" column="name"/>
+            <result property="description" column="description"/>
+            <result property="picture" column="picture"/>
+            <result property="number" column="number"/>
+            <result property="trademark" column="trademark"/>
+            <result property="validPeriod" column="validPeriod"/>
+            <result property="packingSpecification" column="Packingspecification"/>
+            <result property="manufacturer" column="manufacturer"/>
+            <result property="type" column="type"/>
+            <collection property="goodsDetailed" ofType="GoodsDetailed">
+                <id property="shopId" column="pid"/>
+                <result property="AdverseReactions" column="AdverseReactions"/>
+                <result property="Contraindications" column="Contraindications"/>
+                <result property="Dosage" column="Dosage"/>
+                <result property="ExecutiveStandard" column="ExecutiveStandard"/>
+                <result property="FunctionCategory" column="FunctionCategory"/>
+                <result property="Indications" column="Indications"/>
+                <result property="medicineInteractions" column="medicineInteractions"/>
+                <result property="PharmacologyAndToxicology" column="PharmacologyAndToxicology"/>
+                <result property="Store" column="Store"/>
+                <result property="Traits" column="Traits"/>
+            </collection>
+        </association>
+    </resultMap>
+    <select id="findAllOrderByUserId" resultMap="allOrder">
+        select order1.*,goods.*,goodsdetails.*
+        from order1,goods,goodsdetails
+        where userid=#{userId} and order1.shopid = goods.shopid and order1.shopid = goodsdetails.shopid
+    </select>
+    <update id="modifyAddress">
+        update order1 set
+        <choose>
+            <when  test="address != 'air'">
+                addres = #{address}
+            </when>
+            <otherwise>
+                cancel = #{cancel}
+            </otherwise>
+        </choose>
+         where userid = #{userId} and shopid = #{shopId}
+    </update>
+</mapper>

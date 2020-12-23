@@ -7,8 +7,8 @@
     padding-top: 25px;
 }
 .el-footer {
-    background-color: #B3C0D1;
-    color: #333;
+    /*background-color: #B3C0D1;*/
+    /*color: #333;*/
     text-align: center;
     line-height: 60px;
 }
@@ -18,16 +18,16 @@
     line-height:20px;
     /*width: 500px;*/
     width: auto;
-    margin-left: 10%;
+    margin-left: 20%;
 }
 
 .el-main {
     background-color: #E9EEF3;
     color: #333;
-    width: 500px;
-    margin-right: 10%;
+    width: 300px;
+    margin-right: 30%;
     /*text-align: center;*/
-    line-height: 0px;
+    /*line-height: 0px;*/
 }
 
 body > .el-container {
@@ -41,4 +41,13 @@ body > .el-container {
 
 .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+}
+table{
+    border-collapse: collapse;
+}
+table,table tr td {
+    border:1px solid #ccc;
+}
+table tr td{
+    padding: 5px 10px;
 }
