@@ -8,7 +8,7 @@ var search = ["百度", "百度翻译", "百度网盘", "百度地图",
 ];
 
 var domSearchInput = document.querySelector(".search-input");
-var domSearchResult = document.querySelector(".search-result");
+
 
 
 //当未输入时 ，默认值
@@ -538,16 +538,6 @@ Rush.prototype.setDom = function (state) {
     }
 }
 
-
-
-
-//一加载滚动
-$("html, body").scrollTop(0).animate({
-    "scrollTop": $(".section1").offset().top + "px",
-});
-
-
-
 //当浏览器滚动时
 function scrchange() {
     var STop = document.documentElement.scrollTop;
@@ -587,130 +577,7 @@ window.onscroll = function () {
 }
 
 
-/*点击选择省份，根据省名找到下标0所对应的数，
-         *判断省名下标0，找到市下标2所对应的城市并输出市
-         *
-         */
-var privces = [
-    [1, "云南省", 0],
-    [2, "四川省", 0],
-    [3, "陕西省", 0],
-    [4, "山东省", 0],
-    [5, "江苏省", 0],
-    [6, "安徽省", 0],
-];
-var citys = [
-    //云南省
-    [1, "昆明市", 1],
-    [2, "曲靖市", 1],
-    [3, "玉溪市", 1],
-    //四川省
-    [4, "成都市", 2],
-    [5, "绵阳市", 2],
-    [6, "德阳市", 2],
-    //陕西
-    [7, "西安市", 3],
-    [8, "咸阳市", 3],
-    [9, "宝鸡市", 3],
 
-    //山东
-    [10, "济南市", 4],
-    [11, "青岛市", 4],
-    [12, "淄博市", 4],
-    //江苏
-    [13, "南京市", 5],
-    [14, "无锡市", 5],
-    [15, "徐州市", 5],
-    //安徽
-    [16, "合肥市", 6],
-    [17, "芜湖市", 6],
-    [18, "蚌埠市", 6],
-
-];
-var cityChild = [
-    //云南省
-    //昆明市
-    [1, "五华区", 1],
-    [2, "盘龙区", 1],
-    //曲靖市
-    [3, "马龙县", 2],
-    //玉溪市
-    [4, "红塔区", 3],
-
-    //四川省
-    //成都市
-    [5, "武侯区", 4],
-    [6, "双流区", 4],
-    [7, "锦江区", 4],
-    //绵阳市
-    [8, "涪城区", 5],
-    [9, "三台县", 5],
-    //德阳市
-    [10, "旌阳区", 6],
-    [11, "中江县", 6],
-
-    //陕西省
-    //西安市
-    [12, "新城区", 7],
-    [13, "碑林区", 7],
-    //咸阳市
-    [14, "秦都区", 8],
-    [15, "杨凌区", 8],
-    //宝鸡市
-    [16, "渭滨区", 9],
-    [17, "岐山县", 9],
-
-    //山东省
-    //济南市
-    [18, "历下区", 10],
-    [19, "槐荫区", 10],
-    //青岛市
-    [20, "市南区", 11],
-    [21, "市北区", 11],
-    //淄博市
-    [22, "淄川区", 12],
-    [23, "张店县", 12],
-
-    //江苏省
-    //南京市
-    [24, "玄武区", 13],
-    [25, "白下区", 13],
-    //无锡市
-    [26, "崇安区", 14],
-    [27, "南长区", 14],
-    //徐州市
-    [28, "鼓楼区", 15],
-    [29, "云龙区", 15],
-
-];
-
-//获取省列表
-var province = document.getElementById("province");
-var city = document.getElementById("city");
-var district = document.getElementById("district");
-// let str = "<option>-请选择省-</option>";
-let str = "";
-for (let i in privces) {
-    opt = document.createElement("option");
-    opt.className = "priOpt";
-    province.appendChild(opt);
-    opt.innerHTML = privces[i][1];
-    str += "<option>" + privces[i][1] + "</option>"
-}
-province.innerHTML = str;
-//得到省值
-// var priOpt = document.getElementsByClassName("priOpt");
-// console.log(priOpt[0].value);
-
-//根据省值得到首位对应的值。得到相应的城市
-function printCity(name) {
-    // console.log("name", name.length);
-    let str = "";
-    for (let i = 0; i < name.length; i++) {
-        str += "<option>" + name[i][1] + "</option>";
-    }
-    city.innerHTML = str;
-}
 
 function getPriv(name) {
     // console.log(name[0][0]);

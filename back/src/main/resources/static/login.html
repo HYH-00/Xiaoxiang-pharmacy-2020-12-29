@@ -5,30 +5,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>博汇登录</title>
+    <title>潇湘药房登录</title>
     <link href="css/login.css" rel="stylesheet">
     <link href="http://at.alicdn.com/t/font_1524886_qhcjflk0kr.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
 </head>
 
 <body>
-
-    <!-- 内容 -->
-    <div class="login-bg"><img src="images/kejiguang.jpg"></div>
-    <div class="login">
-        <h3>博汇登录</h3>
-        <div class="login-id"><input type="text" placeholder="账号" value="" autofocus></div>
-        <div class="login-pwd">
-            <input type="password" placeholder="密码" value="">
-            <span class="iconfont icon-yincangmima"></span>
-        </div>
-        <div class="login-code">
-            <input type="text" placeholder="验证码" value="" class="vcode-in">
-            <div class="vcode"></div>
-        </div>
-        <div class="login-btn"><a class="index">登录</a></div>
+<div class="login-bg"><img src="images/kejiguang.jpg"></div>
+<div class="login" id="login">
+    <h3>欢迎登录</h3>
+    <div class="login-id"><input type="text" placeholder="账号" value="" autofocus v-model="user.name"></div>
+    <div class="login-pwd">
+        <input type="password" placeholder="密码" value="" v-model="user.password">
+        <span class="iconfont icon-yincangmima"></span>
     </div>
-
-    <script src="js/vcode.js"></script>
-    <script src="js/login.js"></script>
+    <div class="login-code">
+        <input type="text" placeholder="验证码" value="" class="vcode-in" v-model="verification">
+        <div class="vcode"></div>
+    </div>
+    <div class="login-btn"><a class="index" @click="userVerification">登录</a></div>
+</div>
+<script src="js/vcode.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script src="js/jquery-3.4.1.js"></script>
+<script>
+    var login = new Vue({
+        el: "#login",
+        data: {
+            user:{
+                name: '',
+                password: '',
+            },
+            verification: ''
+        },
+        methods: {
+            userVerification: function () {
+                var that = this
+                var flag
+                //检查验证码是否正确
+                //获取显示区生成的验证码
+                var checkCode = document.querySelector(".vcode");
+                //获取输入的验证码
+                var inputCode = document.querySelector(".vcode-in");
+                //判断是否输入错误，错误即更新
+                //数据库查询
+                axios.post("http://localhost:8080/shop/verification",that.user)
+                .then(function (data){
+                    flag = data.data.flag
+                    if (inputCode.value.toUpperCase() === checkCode.innerHTML.toUpperCase()&& flag) {
+                        //存入缓存
+                        // console.log(that.user.name)
+                        window.localStorage.setItem("username", that.user.name);
+                        window.location.assign("index.html");
+                    }
+                    createCode(5);
+                })
+            }
+        }
+    })
+</script>
 </body>
 </html>

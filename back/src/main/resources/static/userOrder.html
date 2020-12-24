@@ -157,7 +157,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="详细地址" :label-width="formLabelWidth">
-                <el-input v-model="form.address" autocomplete="off"></el-input>
+                <el-input v-model="form.address" autocomplete="off" v-bind:placeholder="location1"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -176,6 +176,7 @@
     var a = new Vue({
         el:"#order",
         data:{
+            location1:'',
             dialogFormVisible:false,
             form: {
                 address: '',
@@ -200,9 +201,13 @@
         },
         mounted: async function () {
             //判断是否已经登录，在缓存中获取
+            var name = window.localStorage.getItem("username")
+            //如果不存在即进行错误提示
+            if(name === '洵哥喜欢短头发小姐姐')
+                window.location.assign("error.html");
             //根据用户ID获取所有订单数据，依据分页实现
             //模拟用户‘洵哥喜欢短头发小姐姐’
-            await this.findOrder(1,"洵哥喜欢短头发小姐姐","无",true)
+            await this.findOrder(1,name,"无",true)
         },
         methods:{
             //搜索
@@ -243,7 +248,6 @@
                 return 'success-row'
             },
             pd:function(row,rowindex){
-                console.log(rowindex)
                 if(row.cancel=='已到货')
                     return true
                 return false
@@ -257,23 +261,41 @@
                         "userid":that.tableData[index].userid,
                         "shopid":that.tableData[index].shopId,
                         "address":"air",
-                        "cancel":that.tableData[index].cancel
+                        "cancel":that.tableData[index].cancel,
+                        "number":that.tableData[index].shopnumber
                     }
                 })
+            },
+            //取消订单
+            handleDelete:function(index,row){
+                var that = this
+                axios.get("http://localhost:8080/shop/deleteOrder",{
+                    params:{
+                        "shopId": row.shopId,
+                        "userId": row.userid,
+                    }
+                })
+                this.tableData.splice(index,1)
             },
             //修改地址
             modifyAddress:function(){
                 var that = this
                 this.dialogFormVisible = false
-                this.tableData[this.form.index].address = this.form.area+this.form.address
+                if(this.form.address===''){
+                    this.tableData[this.form.index].address = this.location1
+                }
+                else
+                    this.tableData[this.form.index].address = this.form.area+this.form.address
                 axios.get("http://localhost:8080/shop/modifyAddress",{
                     params:{
                         "userid":that.tableData[that.form.index].userid,
                         "shopid":that.tableData[that.form.index].shopId,
-                        "address":that.form.area+that.form.address,
-                        "cancel":"air"
+                        "address":that.tableData[that.form.index].address,
+                        "cancel":"air",
+                        "number":that.tableData[that.form.index].shopnumber
                     }
                 })
+                this.address=''
             },
             //返回上一级界面
             goBack:function () {
@@ -283,6 +305,7 @@
                 this.form.index = index
                 this.form.row = row
                 this.dialogFormVisible=true
+                this.getPosition()
             },
             findOrder:async function (page,userId,condition,init){
                 var that = this
@@ -314,6 +337,29 @@
                             console.log(data.data)
                         })
                 }
+            },
+            getPosition:async function () {
+                if(navigator.geolocation){
+                    var that = this
+                    var a=''
+                    navigator.geolocation.getCurrentPosition(await function (position) {
+                        that.api(position)
+                    })
+                }
+            },
+            api:async function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var that = this
+                await axios.get("http://api.tianapi.com/txapi/geoconvert/index", {
+                    params: {
+                        "key": "c8ce09e06f66c7b9748c8662c0c9c847",
+                        "lng": longitude,
+                        "lat": latitude,
+                    }
+                }).then(function (data) {
+                    that.location1 = data.data.newslist[0].province + " " + data.data.newslist[0].city + " " + data.data.newslist[0].district + " " + data.data.newslist[0].town
+                })
             }
         }
     })
