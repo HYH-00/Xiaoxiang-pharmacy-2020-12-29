@@ -1,7 +1,7 @@
 <template>
 	<el-row>
 		<el-col :span="32">
-			<el-menu default-active="2" class="el-menu-vertical-demo" @select="selectSidebar" @open="handleOpen" @close="handleClose">
+			<el-menu default-active="订单" class="el-menu-vertical-demo" @select="selectSidebar" @open="handleOpen" @close="handleClose">
 				<el-submenu index="商品操作">
 					<template slot="title">
 						<i class="el-icon-s-goods"></i>

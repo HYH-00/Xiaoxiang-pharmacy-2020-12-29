@@ -61,6 +61,9 @@
 									// alert(dat.id+" "+dat.pwd);
 									
 									// sessionStorage.setItem('user', thatt.ruleForm2.username);
+									var date=new Date();
+									sessionStorage.setItem('year',date.getFullYear());
+									
 									sessionStorage.setItem('adminId',dat.id);
 									sessionStorage.setItem('adminPwd',dat.pwd);
 									sessionStorage.setItem('adminNick',dat.nick);

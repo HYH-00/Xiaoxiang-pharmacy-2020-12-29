@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.Dao.SalesMountMapper">
-    <insert id="insertSalesMount" parameterType="com.example.demo.Bean.SalesMount">
-        insert into salesmount(type_,type,money,time) values (#{type_},#{type},#{money},#{time})
+<mapper namespace="com.example.demo.Dao.Chart.SalesMountMapper">
+    <insert id="insertSalesMount" parameterType="com.example.demo.Bean.DataAnalysis.SalesMount">
+        insert into salesmount(year,month,type,money) values (#{year},#{month},#{type},#{money})
     </insert>
-    <select id="querySalesMountByTime" parameterType="Integer" resultType="com.example.demo.Bean.SalesMount">
-        select * from salesmount where time=#{time};
+    <select id="querySalesMountByYear" parameterType="Integer" resultType="com.example.demo.Bean.DataAnalysis.SalesMount">
+        select * from salesmount where year=#{year};
     </select>
 </mapper>

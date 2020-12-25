@@ -2,23 +2,18 @@
 	<div class="wraper">
 		<el-row>
 			<el-col :span="12">
-				<SalesCategory></SalesCategory>
+				<SalesMount></SalesMount>
 			</el-col>
 			<el-col :span="12">
-				<SalesCategory></SalesCategory>
-			</el-col>
-		</el-row>
-		<el-row>
-			<el-col :span="23">
-				<UserAccess></UserAccess>
+				<SalesNum></SalesNum>
 			</el-col>
 		</el-row>
 	</div>
 </template>
 
 <script>
-	import SalesCategory from './SalesCategory.vue'
-	import UserAccess from './UserAccess.vue'
+	import SalesMount from './Chart/SalesMount.vue'
+	import SalesNum from './Chart/SalesNum.vue'
 	export default {
 		data() {
 			return {
@@ -30,8 +25,8 @@
 
 		},
 		components: {
-			SalesCategory,
-			UserAccess
+			SalesMount,
+			SalesNum
 		}
 	}
 </script>
