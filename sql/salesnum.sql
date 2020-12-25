@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80022
 File Encoding         : 65001
 
-Date: 2020-12-23 10:06:52
+Date: 2020-12-25 18:16:43
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,14 +20,16 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `salesnum`;
 CREATE TABLE `salesnum` (
-  `time` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `year` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `num` int DEFAULT '0',
   `type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `type_` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
+  `month` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- ----------------------------
 -- Records of salesnum
 -- ----------------------------
-INSERT INTO `salesnum` VALUES ('2020', '2', '胃炎', '肠胃用药');
-INSERT INTO `salesnum` VALUES ('2020', '13', '气管炎', '呼吸系统');
+INSERT INTO `salesnum` VALUES ('2021', '5', '胃炎', '1');
+INSERT INTO `salesnum` VALUES ('2021', '5', '气管炎', '2');
+INSERT INTO `salesnum` VALUES ('2020', '2', '胃炎', '3');
+INSERT INTO `salesnum` VALUES ('2020', '13', '气管炎', '4');
