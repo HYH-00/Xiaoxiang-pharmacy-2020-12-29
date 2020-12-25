@@ -13,7 +13,7 @@
     <el-container>
         <el-header>
             <div  style="margin-top: 20px;color: #F8F8F8;width: 20%">
-            <el-page-header @back="goBack" content="用户订单"></el-page-header>
+                <el-page-header @back="goBack" content="用户订单"></el-page-header>
             </div>
         </el-header>
         <div style="margin-top: 10px;text-align: right">
@@ -30,7 +30,7 @@
                         :value="item.value">
                 </el-option>
             </el-select>
-            <el-button type="primary" plain size="small">搜索</el-button>
+            <el-button type="primary" plain size="small" @click="searchOrder()">搜索</el-button>
         </div>
         <el-main>
             <el-table
@@ -73,8 +73,8 @@
                         width="180">
                     <template slot-scope="scope">
                         <el-popover placement="top-start" title="商品图片" trigger="hover">
-                        <img slot="reference" :src="scope.row.goods.picture" style="width: 150px;height: 110px">
-                        <img :src="scope.row.goods.picture" alt="" style="width:100%;height: 100%">
+                            <img slot="reference" :src="scope.row.goods.picture" style="width: 150px;height: 110px">
+                            <img :src="scope.row.goods.picture" alt="" style="width:100%;height: 100%">
                         </el-popover>
                     </template>
                 </el-table-column>
@@ -121,17 +121,17 @@
                     <template slot-scope="scope">
                         <el-button
                                 size="mini"
-                                v-bind:disabled="dis"
+                                v-bind:disabled="pd(scope.row,scope.$index)"
                                 type="primary"
                                 @click="handleEdit(scope.$index, scope.row)">修改地址</el-button>
                         <el-button
                                 size="mini"
-                                v-bind:disabled="dis"
+                                v-bind:disabled="pd(scope.row,scope.$index)"
                                 type="success"
                                 @click="handleConfirm(scope.$index, scope.row)">确认到货</el-button>
                         <el-button
                                 size="mini"
-                                v-bind:disabled="dis"
+                                v-bind:disabled="pd(scope.row,scope.$index)"
                                 type="danger"
                                 @click="handleDelete(scope.$index, scope.row)">取消订单</el-button>
                     </template>
@@ -139,15 +139,15 @@
             </el-table>
         </el-main>
         <div style="text-align: right">
-        <el-pagination
-                background
-                layout="prev, pager, next"
-                size="2"
-                :total="1000">
-        </el-pagination>
+            <el-pagination
+                    background
+                    layout="prev, pager, next"
+                    size="2"
+                    :total="1000">
+            </el-pagination>
         </div>
     </el-container>
-<!--    弹窗-->
+    <!--    弹窗-->
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible" width="30%">
         <el-form :model="form">
             <el-form-item label="地区" :label-width="formLabelWidth">
@@ -157,7 +157,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="详细地址" :label-width="formLabelWidth">
-                <el-input v-model="form.address" autocomplete="off"></el-input>
+                <el-input v-model="form.address" autocomplete="off" v-bind:placeholder="location1"></el-input>
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -176,6 +176,7 @@
     var a = new Vue({
         el:"#order",
         data:{
+            location1:'',
             dialogFormVisible:false,
             form: {
                 address: '',
@@ -183,27 +184,73 @@
                 index:'',
                 row:''
             },
-            dis:true,
             formLabelWidth: '120px',
             tableData: [],
-            options: [],
+            searchData:[],
+            options: [
+                {
+                    value: '已到货',
+                    label: '已到货'
+                },
+                {
+                    value: '未到货',
+                    label: '未到货'
+                }
+            ],
             value: ''
         },
         mounted: async function () {
             //判断是否已经登录，在缓存中获取
+            var name = window.localStorage.getItem("username")
+            //如果不存在即进行错误提示
+            if(name === '洵哥喜欢短头发小姐姐')
+                window.location.assign("error.html");
             //根据用户ID获取所有订单数据，依据分页实现
             //模拟用户‘洵哥喜欢短头发小姐姐’
-            await this.findOrder(1,"洵哥喜欢短头发小姐姐","无",true)
+            await this.findOrder(1,name,"无",true)
         },
         methods:{
+            //搜索
+            searchOrder:function(){
+                console.log(this.value)
+                //还原操作
+                if(this.value===''){
+                    this.tableData=this.searchData
+                    return
+                }
+                //进入搜索
+                this.tableData=[]
+                //判断是否为便捷提示操作
+                if(this.value==='已到货'||this.value==='未到货') {
+                    for (var i = 0; i < this.searchData.length; i++) {
+                        if (this.searchData[i].cancel === this.value)
+                            this.tableData.push(this.searchData[i])
+                    }
+                }
+                //进入用户自定义搜索----利用正则表达式
+                else{
+                    console.log(this.value)
+                    var reg = new RegExp(this.value)
+                    for(var i=0;i<this.searchData.length;i++){
+                        if(this.searchData[i].time.match(reg)||this.searchData[i].goods.name.match(reg)){
+                            this.tableData.push(this.searchData[i])
+                        }
+                    }
+                }
+                //还原搜索
+                this.value=''
+            },
             //区分是否到货
             tableRowClassName({row, rowIndex}) {
                 if(row.cancel=="已到货") {
-                    this.dis=true
                     return 'warning-row'
                 }
-                this.dis=false
                 return 'success-row'
+            },
+            pd:function(row,rowindex){
+                if(row.cancel=='已到货')
+                    return true
+                return false
             },
             //确认到货
             handleConfirm:function(index,row){
@@ -214,23 +261,41 @@
                         "userid":that.tableData[index].userid,
                         "shopid":that.tableData[index].shopId,
                         "address":"air",
-                        "cancel":that.tableData[index].cancel
+                        "cancel":that.tableData[index].cancel,
+                        "number":that.tableData[index].shopnumber
                     }
                 })
+            },
+            //取消订单
+            handleDelete:function(index,row){
+                var that = this
+                axios.get("http://localhost:8080/shop/deleteOrder",{
+                    params:{
+                        "shopId": row.shopId,
+                        "userId": row.userid,
+                    }
+                })
+                this.tableData.splice(index,1)
             },
             //修改地址
             modifyAddress:function(){
                 var that = this
-                this.tableData[this.form.index].address = this.form.area+this.form.address
+                this.dialogFormVisible = false
+                if(this.form.address===''){
+                    this.tableData[this.form.index].address = this.location1
+                }
+                else
+                    this.tableData[this.form.index].address = this.form.area+this.form.address
                 axios.get("http://localhost:8080/shop/modifyAddress",{
                     params:{
                         "userid":that.tableData[that.form.index].userid,
                         "shopid":that.tableData[that.form.index].shopId,
-                        "address":that.form.area+that.form.address,
-                        "cancel":"air"
+                        "address":that.tableData[that.form.index].address,
+                        "cancel":"air",
+                        "number":that.tableData[that.form.index].shopnumber
                     }
                 })
-                this.dialogFormVisible = false
+                this.address=''
             },
             //返回上一级界面
             goBack:function () {
@@ -240,9 +305,11 @@
                 this.form.index = index
                 this.form.row = row
                 this.dialogFormVisible=true
+                this.getPosition()
             },
             findOrder:async function (page,userId,condition,init){
                 var that = this
+                this.tableData=[]
                 if(init){
                     await axios.get("http://localhost:8080/shop/queryOrder",{
                         params:{
@@ -251,10 +318,11 @@
                             "condition":condition
                         }
                     })
-                    .then(function (data){
-                        console.log(data.data)
-                        that.tableData = data.data
-                    })
+                        .then(function (data){
+                            console.log(data.data)
+                            that.searchData = data.data
+                            that.tableData = data.data
+                        })
                 }else{
                     axios.get("http://localhost:8080/shop/queryOrder",{
                         params:{
@@ -263,10 +331,35 @@
                             "condition":condition
                         }
                     })
-                    .then(function (data){
+                        .then(function (data){
+                            that.tableData = data.data
+                            that.searchData = data.data
                             console.log(data.data)
-                     })
+                        })
                 }
+            },
+            getPosition:async function () {
+                if(navigator.geolocation){
+                    var that = this
+                    var a=''
+                    navigator.geolocation.getCurrentPosition(await function (position) {
+                        that.api(position)
+                    })
+                }
+            },
+            api:async function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var that = this
+                await axios.get("http://api.tianapi.com/txapi/geoconvert/index", {
+                    params: {
+                        "key": "c8ce09e06f66c7b9748c8662c0c9c847",
+                        "lng": longitude,
+                        "lat": latitude,
+                    }
+                }).then(function (data) {
+                    that.location1 = data.data.newslist[0].province + " " + data.data.newslist[0].city + " " + data.data.newslist[0].district + " " + data.data.newslist[0].town
+                })
             }
         }
     })

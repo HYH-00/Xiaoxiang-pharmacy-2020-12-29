@@ -1,10 +1,9 @@
 window.onload = function () {
-    createCode(4);
+    createCode(5);
 }
 var checkCode = document.querySelector(".vcode");
-var btn = document.querySelector(".login-btn");
 checkCode.onclick = function () {
-    createCode(4);
+    createCode(5);
 }
 //生成验证码
 function createCode(length) {
@@ -24,19 +23,5 @@ function createCode(length) {
     if (checkCode) {
         //将生成验证码赋值到显示区
         checkCode.innerHTML = code;
-    }
-}
-//点击下一步
-btn.onclick = function () {
-    validateCode();
-}
-//检查验证码是否正确
-function validateCode() {
-    //获取显示区生成的验证码
-    var checkCode = document.querySelector(".vcode");
-    //获取输入的验证码
-    var inputCode = document.querySelector(".vcode-in");
-    if (inputCode.value.toUpperCase() != checkCode.innerHTML.toUpperCase()) {
-        createCode(4);
     }
 }

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 @Mapper
-public interface UserDao {
+public interface UserOrderDao {
     /**
      * 把用户的所有订单查询出来
      * @param userId 用户id
@@ -25,4 +25,20 @@ public interface UserDao {
                               @Param("shopId") String shopId,
                               @Param("address") String address,
                               @Param("cancel") String cancel);
+
+    /**
+     * 通过用户与商品编号，在确认收货以后减少库存量
+     * @param shopId 商品编号
+     * @param number 减少的库存量
+     */
+    public void ModifyInventory(@Param("shopId") String shopId,
+                                @Param("number") int number);
+
+    /**
+     * 删除用户订单
+     * @param shopId 商品编号
+     * @param userId 用户编号
+     */
+    public void deleteOrder(@Param("shopId") String shopId,
+                            @Param("userId") String userId);
 }

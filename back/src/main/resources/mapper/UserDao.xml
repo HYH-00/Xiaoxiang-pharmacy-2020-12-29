@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.demo.Dao.UserDao">
+<mapper namespace="com.example.demo.Dao.UserOrderDao">
 <!--   订单查询-->
     <resultMap id="allOrder" type="Order">
         <id property="userid" column="userid"/>
-        <result property="shopId" column="shopid"/>
+        <id property="shopId" column="shopid"/>
         <result property="shopnumber" column="shopnumber"/>
         <result property="discount" column="discount"/>
         <result property="address" column="addres"/>
@@ -55,4 +55,10 @@
         </choose>
          where userid = #{userId} and shopid = #{shopId}
     </update>
+    <update id="ModifyInventory">
+        update goods set number = number-#{number} where shopid = #{shopId}
+    </update>
+    <delete id="deleteOrder">
+        delete from order1 where userid = #{userId} and shopid = #{shopId}
+    </delete>
 </mapper>

@@ -58,35 +58,16 @@
                 </div>
             </li>
             <li class="header-left-nav">
-                <div class="header-tit"><span class="loca iconfont icon-dizhitianchong-"></span><b id="header-loca-di">成都</b>
-                </div>
-                <div class="header-left-hid" id="header-locat">
-                    <select id="province" onclick="provic()">
-                        <!-- <option value="">-请选择省-</option> -->
-                    </select>
-                    <select id="city" onclick="cityclick()">
-                        <option value="">-请选择市-</option>
-                    </select>
-                    <select id="district" onclick="dis()">
-                        <option value="">-请选区-</option>
-                    </select>
-                </div>
-
+                <div id="address"><span class="loca iconfont icon-dizhitianchong-"></span><b style="color: red">{{location1}}</b></div>
             </li>
         </ul>
         <!-- 右边 -->
         <ul class="header-right">
             <li class="header-right-tit">
-                <a href="login.html" id="header-user">请登录</a>
+                <div id="username"><a href="login.html">{{getUsername}}</a></div>
             </li>
             <li class="header-right-tit">
-                <a href="sigin.html">注册有礼</a>
-            </li>
-            <li class="header-right-tit">
-                <a href="shop.html">我的订单</a>
-            </li>
-            <li class="header-right-tit">
-                <a href="shop.html">我的博汇</a>
+                <a href="userOrder.html">我的订单</a>
             </li>
             <li class="header-right-tit mycar">
                 <a href="cart.html"><span class="iconfont icon-gouwuche2"></span>购物车</a>
@@ -112,7 +93,6 @@
         <button
                 id="search-sea">搜索
         </button>
-        <ul class="search-result"></ul>
     </div>
 </section>
 <!-- 商品分类 -->
@@ -584,7 +564,7 @@
                 <font color="red" :title="goodsData[key].description">{{goodsData[key].description}}</font>
             </div>
             <div class="detail-price"><b class="price">￥{{goodsData[key].price}}</b class="price">
-                <div class="detail-car">加入购物车</div>
+                <div class="detail-car" @click="Purchase(goodsData[key])">加入购物车</div>
             </div>
         </div>
     </li>
@@ -596,7 +576,7 @@
                 <font color="red" :title="goodsData[key+1].description">{{goodsData[key+1].description}}</font>
             </div>
             <div class="detail-price"><b class="price">￥{{goodsData[key+1].price}}</b class="price">
-                <div class="detail-car">加入购物车</div>
+                <div class="detail-car" @click="Purchase(goodsData[key+1])">加入购物车</div>
             </div>
         </div>
     </li>
@@ -618,13 +598,64 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<script type="text/javascript">
+    var username = new Vue({
+        el:'#username',
+        computed:{
+            getUsername:function () {
+                var name = window.localStorage.getItem("username")
+                console.log(name)
+                if(name === 'undefined'){
+                    return '请登录'
+                }
+                return name
+            }
+        }
+    })
+    var address1 = new Vue({
+        el:"#address",
+        data:{
+            location1:'wu'
+        },
+        mounted: function () {
+           this.getPosition()
+        },
+        methods:{
+            getPosition:async function () {
+                if(navigator.geolocation){
+                    var that = this
+                    var a=''
+                    navigator.geolocation.getCurrentPosition(await function (position) {
+                        that.api(position)
+                    })
+                }
+            },
+            api:async function (position) {
+                var latitude = position.coords.latitude;
+                var longitude = position.coords.longitude;
+                var that = this
+                await axios.get("http://api.tianapi.com/txapi/geoconvert/index", {
+                    params: {
+                        "key": "c8ce09e06f66c7b9748c8662c0c9c847",
+                        "lng": longitude,
+                        "lat": latitude,
+                    }
+                }).then(function (data) {
+                    console.log(data.data)
+                    that.location1 = data.data.newslist[0].province + " " + data.data.newslist[0].city + " " + data.data.newslist[0].district + " " + data.data.newslist[0].town
+                })
+                console.log(this.location1)
+            }
+        }
+    })
+</script>
 <script>
     var i=0;
     //创建一个购物车缓存区
     var tmpCartList = window.localStorage.getItem("cartlist");
     tmpCartList = JSON.parse(tmpCartList)
     //折扣物品预购买
-    var discountShopList=[]
+    var discountShopList=tmpCartList
     //用于购物车
     var shopcar = new Vue({
         el:"#ap",
@@ -668,6 +699,34 @@
             },
             Jump:function (data) {
                 JumpProduct(data)
+            },
+            Purchase:function (data) {
+                data.number--;
+                var info = {
+                    "id":data.picture,
+                    "name":data.name,
+                    "title":data.name+" "+data.description+" 批号："+data.shopId,
+                    "num":1,
+                    "price":data.price,
+                    "check": 1,
+                }
+                var flag=0;
+                //查询是否已经购买，如已经购买则仅仅需要数量加一，没有则添加
+                for(var i=0;i<discountShopList.length;i++){
+                    if(discountShopList[i].name==data.name){
+                        discountShopList[i].num++;
+                        flag=1;
+                        continue;
+                    }
+                }
+                if(!flag){
+                    info.number=1;
+                    discountShopList.push(info);
+                    shopcar.nu++;
+                    console.log(shopcar.nu)
+                }
+                //数据更新以后写入缓存
+                writeCache()
             }
         }
     })
