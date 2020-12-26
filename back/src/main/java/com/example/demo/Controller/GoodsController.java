@@ -25,10 +25,7 @@ public class GoodsController {
      */
     @RequestMapping("/allDiscountGoods")
     @ResponseBody
-    public List<Goods> findAllDiscountGoodsController() {
-        System.out.println(goodsService.findAllDiscountGoodsService().toString());
-        return goodsService.findAllDiscountGoodsService();
-    }
+    public List<Goods> findAllDiscountGoodsController() { return goodsService.findAllDiscountGoodsService(); }
 
     /**
      * 找到指定属性（type）的商品

@@ -1,13 +1,6 @@
 <template>
-	<div class="">
+	<div id="app">
 		<el-row>
-			<template>
-				<el-backtop target=".wraper">
-					<div style="{height: 100%;width: 100%;background-color: #f2f5f6;box-shadow: 0 0 6px rgba(0,0,0, .12);text-align: center;line-height: 40px;color: #1989fa;}">
-						UP
-					</div>
-				</el-backtop>
-			</template>
 			<el-col style="margin: 20px 20px 20px 0px;" :span="23" v-for="(it, index) in discountGoods" :key="it">
 				<el-card :body-style="{ padding: '0px'}">
 					<el-row :gutter="0" style="height: 175px;" type="flex" justify="start">
@@ -92,6 +85,15 @@
 		width: 100%;
 		height: 82vh;
 		overflow-x: hidden;
+	}
+
+	.back-top-container {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		overflow: auto;
 	}
 
 	::-webkit-scrollbar {
