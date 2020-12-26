@@ -25,7 +25,7 @@ public class AddPath {
      */
     public List<Goods> addGoodsImagesPath(List<Goods> goodsList){
        for(int i=0;i<goodsList.size();i++){
-           goodsList.get(i).setPicture("http://localhost:8080/shop/goodsImages/"+goodsList.get(i).getPicture());
+           goodsList.get(i).setPicture("http://localhost:8080/shop/"+goodsList.get(i).getPicture());
        }
         return goodsList;
     }

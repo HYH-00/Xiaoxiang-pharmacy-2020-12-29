@@ -54,4 +54,10 @@
         AND
         goods.shopid=goodsdetails.shopid;
     </select>
+    <insert id="insertGoods" parameterType="Goods">
+        insert into goods(shopid,price,name,description,picture,number,trademark,validPeriod,Packingspecification,manufacturer,type) values (#{shopId},#{price},#{name},#{description},#{picture},#{number},#{trademark},#{validPeriod},#{packingSpecification},#{manufacturer},#{type})
+    </insert>
+    <select id="findAllGoods" resultType="Goods">
+        select * from goods;
+    </select>
 </mapper>

@@ -1,14 +1,12 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Bean.Goods;
+import com.example.demo.Other.AddPath;
 import com.example.demo.Service.GoodsService;
 import lombok.experimental.Accessors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,7 +23,14 @@ public class GoodsController {
      */
     @RequestMapping("/allDiscountGoods")
     @ResponseBody
-    public List<Goods> findAllDiscountGoodsController() { return goodsService.findAllDiscountGoodsService(); }
+    public List<Goods> findAllDiscountGoodsController() {
+        List<Goods> list=goodsService.findAllDiscountGoodsService();
+//        list= AddPath.getInstance().addGoodsImagesPath(list);
+//        for(int i=0;i<list.size();++i){
+//            System.out.println(list.get(i).getPicture());
+//        }
+        return list;
+    }
 
     /**
      * 找到指定属性（type）的商品
@@ -43,5 +48,16 @@ public class GoodsController {
     @ResponseBody
     public List<Goods> findGoodDetailedByIdController(@RequestParam("id") String shopId){
         return goodsService.findGoodDetailedByIdService(shopId);
+    }
+    @RequestMapping("/insertGoods")
+    @ResponseBody
+    public int insertGoods(@RequestBody Goods goods){
+        System.out.println(goods);
+        return goodsService.insertGoods(goods);
+    }
+    @RequestMapping("/findAllGoods")
+    @ResponseBody
+    public List<Goods> findAllGoods(){
+        return goodsService.findAllGoods();
     }
 }

@@ -3,9 +3,11 @@ server:
   servlet:
     context-path: /shop
 spring:
+  resources:
+    static-locations: classpath:/templates,file:D:\GitDepository\gitee\JShop\productImage\
   datasource:
-    username: shop
-    password: 123456
+    username: root
+    password: 1808779585
     url: jdbc:mysql://localhost:3306/shop?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis:

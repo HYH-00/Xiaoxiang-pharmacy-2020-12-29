@@ -10,19 +10,21 @@
 			<el-main>
 				<component :is="comName" v-bind:userinfo="userinfo"></component>
 			</el-main>
+			
+			
 			<el-drawer size="60%" title="商品添加" :before-close="handleClose" :visible.sync="addproduct" direction="ltr"
 			custom-class="demo-drawer" ref="drawer">
 				<div class="demo-drawer__content">
 					<el-form ref="form" :model="addform" label-width="80px">
 						<el-row :gutter="0" style="text-align: center;">
-							<el-upload class="upload-demo" drag limit="2" :on-success="handlesuccess" action="http://localhost:8081/springboot/fileupload"
-							multiple>
+							<el-upload class="upload-demo" drag limit="1" :on-success="handlesuccess" action="http://localhost:8080/shop/fileupload"
+							multiple ref='upload' :file-list="addproductimgList">
 								<i class="el-icon-upload"></i>
 								<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
 								<div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
 							</el-upload>
-							<img :src="addform.imgurl" />
-							<p>{{addform.imgurl}}</p>
+							<!-- <img :src="addform.imgurl" /> -->
+							<!-- <p>{{addform.imgurl}}</p> -->
 						</el-row>
 						<el-row :gutter="5">
 							<el-col :span="8">
@@ -42,11 +44,13 @@
 							</el-col>
 						</el-row>
 						<el-row :gutter="5">
-							<el-col :span="8">
+							<el-col :span="23">
 								<el-form-item label="描述">
-									<el-input v-model="addform.description" style="width: 200px;"></el-input>
+									<el-input type="textarea" v-model="addform.description"></el-input>
 								</el-form-item>
 							</el-col>
+						</el-row>
+						<el-row :gutter="5">
 							<el-col :span="8">
 								<el-form-item label="库存量">
 									<el-input v-model="addform.number" style="width: 200px;"></el-input>
@@ -57,13 +61,24 @@
 									<el-input v-model="addform.trademark" style="width: 200px;"></el-input>
 								</el-form-item>
 							</el-col>
-						</el-row>
-						<el-row :gutter="5">
 							<el-col :span="8">
 								<el-form-item label="有效期">
 									<el-input v-model="addform.validPeriod" style="width: 200px;"></el-input>
 								</el-form-item>
 							</el-col>
+							
+						</el-row>
+						<el-row :gutter="5">
+<!-- 							<el-col :span="8">
+								<el-form-item label="折扣">
+									<el-input v-model="addform.discount" style="width: 200px;"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="折扣期限">
+									<el-input v-model="addform.time" style="width: 200px;"></el-input>
+								</el-form-item>
+							</el-col> -->
 							<el-col :span="8">
 								<el-form-item label="包装规格">
 									<el-input v-model="addform.packingSpecification" style="width: 200px;"></el-input>
@@ -72,18 +87,6 @@
 							<el-col :span="8">
 								<el-form-item label="制造商">
 									<el-input v-model="addform.manufacturer" style="width: 200px;"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="5">
-							<el-col :span="8">
-								<el-form-item label="折扣">
-									<el-input v-model="addform.discount" style="width: 200px;"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="8">
-								<el-form-item label="折扣期限">
-									<el-input v-model="addform.time" style="width: 200px;"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
@@ -125,20 +128,22 @@
 				},
 				comName: 'Main',
 				addproduct: false,
+				loading: false,
+				addproductimgList:[],
 				addform: {
-					imgurl:'',
-					shopId:'',
-					price:'',
-					name:'',
-					description:'',
-					number:'',
-					trademark:'',
-					validPeriod:'',
-					packingSpecification:'',
-					manufacturer:'',
-					discount:'',
-					time:'',
-					type:''
+					imgurl: '',
+					shopId: '',
+					price: '',
+					name: '',
+					description: '',
+					number: '',
+					trademark: '',
+					validPeriod: '',
+					packingSpecification: '',
+					manufacturer: '',
+					discount: '',
+					time: '',
+					type: ''
 				}
 			};
 		},
@@ -170,24 +175,119 @@
 				if (this.loading) {
 					return;
 				}
-				done();
-				// this.$confirm('确定要提交表单吗？')
-				// 	.then(function() {
-				// 		this.loading = true;
-				// 		this.timer = setTimeout(() => {
-				// 			done();
-				// 			// 动画关闭需要一定的时间
-				// 			setTimeout(() => {
-				// 				this.loading = false;
-				// 			}, 400);
-				// 		}, 2000);
-				// 	})
-				// 	.catch(function() {});
+				var that=this;
+				if(this.judgeaddproductfrom()){
+					return;
+				}
+				this.$confirm('确定要提交表单吗？')
+					.then(function() {
+						that.loading = true;
+						that.timer = setTimeout(() => {
+							done();
+							// that.$alert(that.shopId)
+							
+							that.$axios.post("http://localhost:8080/shop/insertGoods",{
+								shopId:that.addform.shopId,
+								price:that.addform.price,
+								name:that.addform.name,
+								description:that.addform.description,
+								picture:that.addform.imgurl,
+								number:that.addform.number,
+								trademark:that.addform.trademark,
+								validPeriod:that.addform.validPeriod,
+								packingSpecification:that.addform.packingSpecification,
+								manufacturer:that.addform.manufacturer,
+								type:that.addform.type
+
+							}).then(function(res){
+								console.log(res);
+								that.initaddproductfrom();
+							}).catch(function(err){
+								console.log(err)
+							})
+							
+							// 动画关闭需要一定的时间
+							setTimeout(() => {
+								that.loading = false;
+							}, 300);
+						}, 800);
+					})
+					.catch(function() {});
+			},
+			up() {
+
+			},
+			initaddproductfrom(){
+				this.addform.imgurl='',
+				this.addform.shopId= '',
+				this.addform.price= '',
+				this.addform.name= '',
+				this.addform.description= '',
+				this.addform.number= '',
+				this.addform.trademark= '',
+				this.addform.validPeriod= '',
+				this.addform.packingSpecification= '',
+				this.addform.manufacturer= '',
+				this.addform.type= '',
+				this.$refs.upload.clearFiles();
 			},
 			cancelForm() {
 				// this.loading = false;
 				this.addproduct = false;
 				clearTimeout(this.timer);
+			},
+			handlesuccess(response, file, fileList) {
+				// console.log("success")
+				console.log(response)
+				console.log(file)
+				console.log(fileList)
+				this.addform.imgurl = response.data
+			},
+			judgeaddproductfrom(){
+				if(this.addform.imgurl==''){
+					this.$message('图片未上传');
+					return true;
+				}
+				if(this.addform.shopId==''){
+					this.$message('请填写批准文号');
+					return true;
+				}
+				if(this.addform.price==''){
+					this.$message('请填写价格');
+					return true;
+				}
+				if(this.addform.name==''){
+					this.$message('请填写商品名');
+					return true;
+				}
+				if(this.addform.description==''){
+					this.$message('请填写描述');
+					return true;
+				}
+				if(this.addform.number==''){
+					this.$message('请填写商品数量');
+					return true;
+				}
+				if(this.addform.trademark==''){
+					this.$message('请填写商标');
+					return true;
+				}
+				if(this.addform.validPeriod==''){
+					this.$message('请填写有效期');
+					return true;
+				}
+				if(this.addform.packingSpecification==''){
+					this.$message('请填写包装规格');
+					return true;
+				}
+				if(this.addform.manufacturer==''){
+					this.$message('请填写制造商');
+					return true;
+				}
+				if(this.addform.type==''){
+					this.$message('请填写商品类型');
+					return true;
+				}
 			}
 		},
 		components: {

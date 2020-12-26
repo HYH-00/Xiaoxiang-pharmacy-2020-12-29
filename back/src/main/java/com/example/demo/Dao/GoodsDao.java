@@ -26,4 +26,8 @@ public interface GoodsDao {
      * @return 返回数据的
      */
     public List<Goods> findGoodDetailedById(String shopId);
+
+    public int insertGoods(Goods goods);
+
+    public List<Goods> findAllGoods();
 }

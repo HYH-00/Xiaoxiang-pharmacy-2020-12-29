@@ -6,7 +6,7 @@
 					<el-row :gutter="0" style="height: 175px;" type="flex" justify="start">
 						<el-col :span="4">
 							<!-- <div class="grid-content bg-purple"> -->
-							<img style="border-radius: 20px;height: 200px;width: 200px;" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"></img>
+							<img style="border-radius: 20px;height: 200px;width: 200px;" :src="discountGoods[index].picture"></img>
 							<!-- </div> -->
 						</el-col>
 						<el-col :span="18" style="text-align: left;margin-left: 40px;margin-top: -35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
@@ -67,7 +67,7 @@
 		methods: {
 			getallDiscountGoods() {
 				var that = this;
-				this.$axios.post("http://localhost:8080/shop/allDiscountGoods")
+				this.$axios.post("http://localhost:8080/shop/findAllGoods")
 					.then(function(res) {
 						console.log(res);
 						that.discountGoods = res.data;

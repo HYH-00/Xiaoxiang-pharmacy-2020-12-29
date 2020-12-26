@@ -29,5 +29,12 @@ public class GoodsService {
     public List<Goods> findGoodDetailedByIdService(String shopId){
         return path.addGoodsImagesPath(goodsDao.findGoodDetailedById(shopId));
     }
+    public int insertGoods(Goods goods){
+        return goodsDao.insertGoods(goods);
+    }
+
+    public List<Goods> findAllGoods(){
+        return path.addGoodsImagesPath(goodsDao.findAllGoods());
+    }
 
 }
