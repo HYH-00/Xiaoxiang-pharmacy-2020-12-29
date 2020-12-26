@@ -138,7 +138,7 @@ public class SalesController {
         }
         chartData.setColumns(columns);
         chartData.setRows(rows);
-        System.out.println(chartData);
+//        System.out.println(chartData);
         return Result.ok().put("data", chartData);
     }
 }

@@ -54,7 +54,7 @@
 				else if (data == "用户管理") this.comName = "User";
 			},
 			SideSelect_(data){
-				if(data=="数据分析")this.comName="OrderData";
+				if(data=="订单数据")this.comName="OrderData";
 			}
 		},
 		components: {
