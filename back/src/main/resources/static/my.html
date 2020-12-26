@@ -1,27 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的信息</title>
+    <link href="http://at.alicdn.com/t/font_1524886_uvkjm364bi.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
     <link href="css/my.css" rel="stylesheet">
+    <link href="css/public.css" rel="stylesheet">
+    <link href="css/swiper.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
-
 <body>
-
-    <!-- 我的个人信息 -->
-    <!-- 管理员和个人 -->
-    <!-- 用户名，密码，电话，身份证，qq，mail -->
-    <div>
-        <div class="mytit">用户信息</div>
-        <div id="list" class="wrap">暂无数据</div>
-
-        <div class="mybtn">
-            <div class="centerfooter-btn"><a href="index.html">返回首页</a></div>
-        </div>
+<div class="right" id="shopcar">
+    <ul class="wrap1">
+        <li><a href="my.html"><span class="iconfont icon-ren-copy"></span></a></li>
+        <li><a href="cart.html"><span class="iconfont icon-gouwuche2"></span><span>购物车<b
+                class="numc"><div id="ap">{{nu}}</div></b></span></a></li>
+        <li><a href="userOrder.html"><span class="iconfont icon-shouhou1"></span><span>订单管理</span></a></li>
+    </ul>
+</div>
+<div class="mytit">用户基本信息</div>
+<div id="Visualization" style="display: inline-block;width: 100%;height: 500px">
+    <div style="float:left;margin-left: 170px; width:500px; text-align: center;">
+    <p style="font-size: small">资金可视化分析</p>
+    <el-tooltip class="item" :content="value" placement="left" effect="light">
+    <el-select v-model="value" placeholder="商品类型数量" size="mini" style="width: 120px" @change="description">
+        <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+        </el-option>
+    </el-select>
+    </el-tooltip><br><br>
+    <ve-pie :data="chartData"></ve-pie>
     </div>
-    <script src="js/my.js"></script>
+    <div style="margin-right: 150px;float: left">
+        <ul>
+            <li>用户名： XXXX</li><br>
+            <li>密码： XXXX</li>
+            <li>余额： XXXX</li><br>
+            <li>总计购买商品： XXXX</li>
+        </ul>
+    </div>
+    <div style="margin-right: 0px;text-align: center">
+        <p>商 品 词 云 分 析</p>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="goodsImages/wy.png">
+    </div>
+</div>
+<div class="mybtn">
+    <div class="centerfooter-btn"><a href="index.html">返回首页</a></div>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/v-charts/lib/index.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/v-charts/lib/style.min.css">
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    //获得一个购物车缓存区
+    var tmpCartList = window.localStorage.getItem("cartlist");
+    tmpCartList = JSON.parse(tmpCartList)
+    //获取缓存区的用户
+    var userLocal = window.localStorage.getItem("username");
+    //用于购物车
+    var shopcar = new Vue({
+        el: "#ap",
+        data: {
+            nu: tmpCartList.length
+        }
+    })
+    var Visualization1 = new Vue({
+        el: '#Visualization',
+        data: {
+            originalData:{},
+            chartData: {
+                columns: ['type', 'number'],
+                rows: []
+            },
+            options: [{
+                value: '展示每一类型商品的购买数量比例',
+                label: '商品类型数量',
+            }, {
+                value: '展示每一类型商品的花费资金比例',
+                label: '商品类型资金'
+            }, {
+                value: '展示每一类型商品的折扣比例',
+                label: '商品类型折扣',
+            }, {
+                value: '展示总支出与总折扣比例',
+                label: '支出与折扣',
+            }],
+            value: '展示每一类型商品的购买数量比例',
+        },
+        mounted: async function () {
+            await this.retrieveData()
+        },
+        methods: {
+            //获取数据分析的数据
+            retrieveData: async function () {
+                var that = this
+                await axios.get("http://localhost:8080/shop/userDataAnalysis", {
+                    params: {
+                        "userid": userLocal
+                    }
+                })
+                    .then(function (data) {
+                        that.originalData = data.data
+                        console.log(that.originalData)
+                        for (var i = 0; i < data.data.length; i++) {
+                            var b = {}
+                            b.type = data.data[i].type
+                            b.number = data.data[i].number
+                            that.chartData.rows.push(b)
+                        }
+                    })
+            },
+            description:function (value) {
+                console.log(value)
+                if(value === '展示每一类型商品的购买数量比例')
+                    this.PurchaseQuantity()
+                if(value === '展示每一类型商品的花费资金比例')
+                    this.SpendMoney()
+                if(value === '展示每一类型商品的折扣比例')
+                    this.discountRate()
+                if(value === '展示总支出与总折扣比例')
+                    this.spendingAndDiscount()
+            },
+            //购买数量
+            PurchaseQuantity:function () {
+                this.chartData.rows=[]
+                for (var i = 0; i < this.originalData.length; i++) {
+                    var b = {}
+                    b.type = this.originalData[i].type
+                    b.number = this.originalData[i].number
+                    this.chartData.rows.push(b)
+                }
+            },
+            //花费资金
+            SpendMoney:function () {
+                this.chartData.rows=[]
+                for (var i = 0; i < this.originalData.length; i++) {
+                    var b = {}
+                    b.type = this.originalData[i].type
+                    b.number = this.originalData[i].amount
+                    this.chartData.rows.push(b)
+                }
+            },
+            //折扣比例
+            discountRate:function (){
+                this.chartData.rows=[]
+                for (var i = 0; i < this.originalData.length; i++) {
+                    var b = {}
+                    b.type = this.originalData[i].type
+                    b.number = this.originalData[i].discount
+                    this.chartData.rows.push(b)
+                }
+                console.log(this.chartData)
+            },
+            //支出与折扣
+            spendingAndDiscount:function () {
+                this.chartData.rows=[]
+                var discount=0
+                var amount=0
+                for(var i=0;i<this.originalData.length;i++){
+                    discount+=this.originalData[i].discount
+                    amount+=this.originalData[i].amount
+                }
+                var a = {}
+                a.type="折扣"
+                a.number = discount
+                this.chartData.rows.push(a)
+                var b = {}
+                b.type="支出"
+                b.number = amount
+                this.chartData.rows.push(b)
+            }
+        }
+    })
+</script>
 </body>
-
 </html>

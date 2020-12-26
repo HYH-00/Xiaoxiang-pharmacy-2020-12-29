@@ -3,10 +3,12 @@ package com.example.demo.Dao;
 import com.example.demo.Bean.Order;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Mapper
+@Repository
 public interface UserOrderDao {
     /**
      * 把用户的所有订单查询出来

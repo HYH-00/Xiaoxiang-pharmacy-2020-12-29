@@ -202,8 +202,8 @@
         mounted: async function () {
             //判断是否已经登录，在缓存中获取
             var name = window.localStorage.getItem("username")
-            //如果不存在即进行错误提示
-            if(name === '洵哥喜欢短头发小姐姐')
+            // //如果不存在即进行错误提示
+            if(name === 'undefined')
                 window.location.assign("error.html");
             //根据用户ID获取所有订单数据，依据分页实现
             //模拟用户‘洵哥喜欢短头发小姐姐’
@@ -324,7 +324,7 @@
                             that.tableData = data.data
                         })
                 }else{
-                    axios.get("http://localhost:8080/shop/queryOrder",{
+                    await axios.get("http://localhost:8080/shop/queryOrder",{
                         params:{
                             "page":page,
                             "userId":userId,
