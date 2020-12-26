@@ -17,4 +17,7 @@ public class SalesMountService {
     public List<SalesMount> querySalesMountByYear(int year){
         return salesMountMapper.querySalesMountByYear(year);
     }
+    public List<SalesMount> querySalesMountAll(){
+        return salesMountMapper.querySalesMountAll();
+    }
 }

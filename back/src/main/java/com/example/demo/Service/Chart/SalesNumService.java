@@ -1,5 +1,6 @@
 package com.example.demo.Service.Chart;
 
+import com.example.demo.Bean.DataAnalysis.SalesMount;
 import com.example.demo.Bean.DataAnalysis.SalesNum;
 import com.example.demo.Dao.Chart.SalesNumMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,5 +17,8 @@ public class SalesNumService {
     }
     public List<SalesNum> querySalesNumByYear(int year){
         return salesNumMapper.querySalesNumByYear(year);
+    }
+    public List<SalesNum> querySalesNumAll(){
+        return salesNumMapper.querySalesNumAll();
     }
 }
