@@ -100,7 +100,7 @@
     <div class="nav wrap">
         <a href="index.html"><span class="nav-li iconfont icon-tubiao1-copy"></span>全部商品分类</a>
         <a href="index.html">首页</a>
-        <a href="shop.html">限时抢购</a>
+        <a href="#test">限时抢购</a>
         <a href="shop.html">优惠券领取</a>
         <a href="shop.html">药品超市</a>
         <a href="shop.html">养生保健馆</a>
@@ -503,7 +503,7 @@
     </div>
 </section>
 <!--折扣商品-->
-<div id="test" v-if="!discountOrOrdinary">
+<div id="test" v-if="!discountOrOrdinary" name="test">
 <div class="main-tit">—— <b>折扣商品推荐</b>——</div>
 <section class="section3">
     <ul class="rush-list" v-for="(data,key) in discountData" v-if="key%3==0">
