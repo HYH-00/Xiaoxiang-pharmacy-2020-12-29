@@ -7,4 +7,7 @@
     <select id="querySalesNumByYear" parameterType="Integer" resultType="com.example.demo.Bean.DataAnalysis.SalesNum">
         select * from salesnum where year=#{year};
     </select>
+    <select id="querySalesNumAll" resultType="com.example.demo.Bean.DataAnalysis.SalesNum">
+        select * from salesnum;
+    </select>
 </mapper>

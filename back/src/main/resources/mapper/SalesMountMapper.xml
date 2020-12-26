@@ -7,4 +7,7 @@
     <select id="querySalesMountByYear" parameterType="Integer" resultType="com.example.demo.Bean.DataAnalysis.SalesMount">
         select * from salesmount where year=#{year};
     </select>
+    <select id="querySalesMountAll" resultType="com.example.demo.Bean.DataAnalysis.SalesMount">
+        select * from salesmount;
+    </select>
 </mapper>

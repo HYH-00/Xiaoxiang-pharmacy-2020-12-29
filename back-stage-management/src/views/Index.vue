@@ -5,7 +5,7 @@
 		</el-header>
 		<el-container>
 			<el-aside style="width: auto;">
-				<Side></Side>
+				<Side @SideSelect="SideSelect_"></Side>
 			</el-aside>
 			<el-main>
 				<component :is="comName" v-bind:userinfo="userinfo"></component>
@@ -22,6 +22,7 @@
 	import Order from '../components/Order.vue'
 	import Message from '../components/Message.vue'
 	import User from '../components/User.vue'
+	import OrderData from '../components/OrderData.vue'
 	export default {
 		data() {
 			return {
@@ -51,6 +52,9 @@
 				else if (data == "消息中心") this.comName = "Message";
 				else if (data == "订单管理") this.comName = "Order";
 				else if (data == "用户管理") this.comName = "User";
+			},
+			SideSelect_(data){
+				if(data=="订单数据")this.comName="OrderData";
 			}
 		},
 		components: {
@@ -60,7 +64,8 @@
 			Product,
 			Order,
 			Message,
-			User
+			User,
+			OrderData
 		}
 	}
 </script>

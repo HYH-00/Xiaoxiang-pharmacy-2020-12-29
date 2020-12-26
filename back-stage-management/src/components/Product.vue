@@ -1,5 +1,5 @@
 <template>
-	<div class="wraper">
+	<div class="">
 		<el-row>
 			<template>
 				<el-backtop target=".wraper">
@@ -10,18 +10,51 @@
 			</template>
 			<el-col style="margin: 20px 20px 20px 0px;" :span="23" v-for="(it, index) in discountGoods" :key="it">
 				<el-card :body-style="{ padding: '0px'}">
-					<div style="width: 100%;height: 200px;">
-						<div style="text-align: left;">
-							<!-- <div class="block"> -->
-							<el-image style="border-radius: 20px;width: 200px;height: 200px;" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"></el-image>
+					<el-row :gutter="0" style="height: 175px;" type="flex" justify="start">
+						<el-col :span="4">
+							<!-- <div class="grid-content bg-purple"> -->
+							<img style="border-radius: 20px;height: 200px;width: 200px;" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"></img>
 							<!-- </div> -->
+						</el-col>
+						<el-col :span="18" style="text-align: left;margin-left: 40px;margin-top: -35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+							<!-- <div class="grid-content bg-purple" style="text-align: left;"> -->
+							<h3 style="height: 20px;">商品名称: {{discountGoods[index].name}}</h3>
+							<p style="height: 20px;">批准文号: {{discountGoods[index].shopId}}</p>
+							<p style="height: 20px;">描述: {{discountGoods[index].description}}</p>
+							<p style="height: 20px;">库存量: {{discountGoods[index].number}}</p>
+							<p style="height: 20px;">商标: {{discountGoods[index].trademark}}</p>
+							<p style="height: 20px;">制造商: {{discountGoods[index].manufacturer}}</p>
+							<p style="height: 20px;">医药用品类别: {{discountGoods[index].type}}</p>
+							<!-- </div> -->
+						</el-col>
+					</el-row>
+					<el-row style="height: 3px;">
+						<el-divider style="height: 3px;margin-top: -60px;" />
+					</el-row>
+					<el-row style="height: 40px;" type="flex" justify="end">
+						<el-col :span="7" :offset="19">
+							<el-button-group style="height: 80px;margin-top: -60px;margin-right: 10px;">
+								<el-button type="primary" icon="el-icon-edit" plain></el-button>
+								<el-button type="success" icon="el-icon-collection-tag" plain></el-button>
+								<el-button type="danger" icon="el-icon-delete" plain></el-button>
+							</el-button-group>
+						</el-col>
+					</el-row>
+					<!-- <div style="width: 100%;height: 262px;">
+						<div slot="header" class="clearfix">
+							<div style="height: 200px;margin-bottom: -17px;">
+								<img style="border-radius: 20px;width: 200px;height: 200px;" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"></img>
+							</div>
 						</div>
-					</div>
-					<div style="height: 60px;">
-						<!-- <div class="bottom clearfix"> -->
-						<el-button type="text" class="button">操作按钮</el-button>
-						<!-- </div> -->
-					</div>
+						<el-divider style="height: 3px;margin-top: -60px;" />
+						<div style="text-align: right;">
+							<el-button-group style="height: 80px;margin-top: -118px;margin-right: 10px;">
+								<el-button type="primary" icon="el-icon-edit" plain></el-button>
+								<el-button type="success" icon="el-icon-collection-tag" plain></el-button>
+								<el-button type="danger" icon="el-icon-delete" plain></el-button>
+							</el-button-group>
+						</div>
+					</div> -->
 				</el-card>
 			</el-col>
 		</el-row>
@@ -70,8 +103,67 @@
 		height: 0;
 	}
 
+	.el-row {
+		margin-bottom: 20px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.el-col {
+		border-radius: 4px;
+	}
+
+	.bg-purple-dark {
+		background: #99a9bf;
+	}
+
+	.bg-purple {
+		background: #d3dce6;
+	}
+
+	.bg-purple-light {
+		background: #e5e9f2;
+	}
+
+	.grid-content {
+		border-radius: 4px;
+		min-height: 36px;
+	}
+
+	.row-bg {
+		padding: 10px 0;
+		background-color: #f9fafc;
+	}
+
 	.image {
 		width: 100%;
 		display: block;
+	}
+
+	.time {
+		font-size: 13px;
+		color: #999;
+	}
+
+	.bottom {
+		margin-top: 13px;
+		line-height: 12px;
+	}
+
+	.button {
+		padding: 0;
+		float: right;
+	}
+
+	.clearfix:before,
+	.clearfix:after {
+		display: table;
+		content: "";
+	}
+
+	.clearfix:after {
+		clear: both
 	}
 </style>

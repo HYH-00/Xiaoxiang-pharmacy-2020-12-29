@@ -9,4 +9,5 @@ import java.util.List;
 public interface SalesMountMapper {
     public int insertSalesMount(SalesMount salesMount);
     public List<SalesMount> querySalesMountByYear(int year);
+    public List<SalesMount> querySalesMountAll();
 }

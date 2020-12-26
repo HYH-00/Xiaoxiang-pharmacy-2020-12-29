@@ -26,6 +26,7 @@ public class GoodsController {
     @RequestMapping("/allDiscountGoods")
     @ResponseBody
     public List<Goods> findAllDiscountGoodsController() {
+        System.out.println(goodsService.findAllDiscountGoodsService().toString());
         return goodsService.findAllDiscountGoodsService();
     }
 

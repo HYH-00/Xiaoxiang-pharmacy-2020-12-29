@@ -2,7 +2,6 @@ package com.example.demo.Dao.Chart;
 
 import com.example.demo.Bean.DataAnalysis.Drugstype;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
