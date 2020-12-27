@@ -8,19 +8,15 @@
 						<span>商品操作</span>
 					</template>
 					<el-menu-item index="商品添加">商品添加</el-menu-item>
-					<el-menu-item index="商品修改">商品修改</el-menu-item>
-					<el-menu-item index="商品删除">商品删除</el-menu-item>
 					<el-menu-item index="商品查询">商品查询</el-menu-item>
 				</el-submenu>
-				<el-submenu index="订单操作">
+				<el-menu-item index="订单查询">
 					<template slot="title">
 						<i class="el-icon-s-order"></i>
-						<span slot="title">订单操作</span>
+						<span slot="title">订单查询</span>
 					</template>
-					<el-menu-item index="订单修改">订单修改</el-menu-item>
-					<el-menu-item index="订单删除">订单删除</el-menu-item>
-					<el-menu-item index="订单查询">订单查询</el-menu-item>
-				</el-submenu>
+					<!-- <el-menu-item index="订单查询">订单查询</el-menu-item> -->
+				</el-menu-item>
 				<el-submenu index="用户操作">
 					<template slot="title">
 						<i class="el-icon-s-custom"></i>

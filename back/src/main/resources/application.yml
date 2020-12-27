@@ -4,7 +4,7 @@ server:
     context-path: /shop
 spring:
   resources:
-    static-locations: classpath:/templates,file:D:\GitDepository\gitee\JShop\productImage\
+    static-locations: classpath:/static,file:D:\GitDepository\gitee\JShop\productImage\
   datasource:
     username: root
     password: 1808779585

@@ -30,4 +30,12 @@ public interface GoodsDao {
     public int insertGoods(Goods goods);
 
     public List<Goods> findAllGoods();
+
+
+    public List<Goods> findLikeGoodsByName(String name);
+    public List<Goods> findLikeGoodsByShopId(String shopId);
+    public List<Goods> findLikeGoodsByType(String type);
+    public List<Goods> findLikeGoodsByTrademark(String trademark);
+
+    public List<Goods> findGoodPictureByShopId(String shopId);
 }

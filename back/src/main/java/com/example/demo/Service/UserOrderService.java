@@ -54,4 +54,18 @@ public class UserOrderService {
     public void deleteOrderService(String userId,String shopId){
         userOrderDao.deleteOrder(shopId,userId);
     }
+
+
+    public List<Order> findAllOrder(){
+        return userOrderDao.findAllOrder();
+    }
+    public List<Order> findLikeOrderByUserId(String userid){
+        return userOrderDao.findLikeOrderByUserId(userid);
+    }
+    public List<Order> findLikeOrderByShopId(String shopId){
+        return userOrderDao.findLikeOrderByShopId(shopId);
+    }
+    public List<Order> findLikeOrderByCancel(String cancel){
+        return userOrderDao.findLikeOrderByCancel(cancel);
+    }
 }

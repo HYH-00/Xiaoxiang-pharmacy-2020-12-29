@@ -3,11 +3,12 @@
 <mapper namespace="com.example.demo.Dao.UserOrderDao">
 <!--   订单查询-->
     <resultMap id="allOrder" type="Order">
-        <id property="userid" column="userid"/>
-        <id property="shopId" column="shopid"/>
+        <id property="key" column="primarykey"/>
+        <result property="userid" column="userid"/>
+        <result property="shopId" column="shopid"/>
         <result property="shopnumber" column="shopnumber"/>
         <result property="discount" column="discount"/>
-        <result property="address" column="addres"/>
+        <result property="address" column="address"/>
         <result property="time" column="time"/>
         <result property="allprice" column="allprice"/>
         <result property="cancel" column="cancel"/>
@@ -61,4 +62,27 @@
     <delete id="deleteOrder">
         delete from order1 where userid = #{userId} and shopid = #{shopId}
     </delete>
+
+
+    <select id="findAllOrder" resultType="Order">
+        select * from order1;
+    </select>
+    <select id="findLikeOrderByUserId"
+            resultType="Order"
+            parameterType="String">
+        select * from order1 where userid LIKE "%${userid}%"
+    </select>
+    <select id="findLikeOrderByShopId"
+            resultType="Order"
+            parameterType="String">
+        select * from order1 where shopid LIKE "%${shopId}%"
+    </select>
+    <select id="findLikeOrderByCancel"
+            resultType="Order"
+            parameterType="String">
+        select * from order1 where cancel LIKE "%${cancel}%"
+    </select>
+<!--    public List<Order> findLikeOrderByUserId(String userid);-->
+<!--    public List<Order> findLikeOrderByShopId(String shopId);-->
+<!--    public List<Order> findLikeOrderByCancel(String cancel);-->
 </mapper>

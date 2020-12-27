@@ -9,7 +9,7 @@
 							<img style="border-radius: 20px;height: 200px;width: 200px;" :src="discountGoods[index].picture"></img>
 							<!-- </div> -->
 						</el-col>
-						<el-col :span="18" style="text-align: left;margin-left: 40px;margin-top: -35px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+						<el-col :span="18" style="text-align: left;margin-left: 40px;margin-top:20px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
 							<!-- <div class="grid-content bg-purple" style="text-align: left;"> -->
 							<h3 style="height: 20px;">商品名称: {{discountGoods[index].name}}</h3>
 							<p style="height: 20px;">批准文号: {{discountGoods[index].shopId}}</p>
@@ -26,28 +26,13 @@
 					</el-row>
 					<el-row style="height: 40px;" type="flex" justify="end">
 						<el-col :span="7" :offset="19">
-							<el-button-group style="height: 80px;margin-top: -60px;margin-right: 10px;">
+							<el-button-group style="height: 80px;margin-top: 10px;margin-right: 10px;">
 								<el-button type="primary" icon="el-icon-edit" plain></el-button>
 								<el-button type="success" icon="el-icon-collection-tag" plain></el-button>
 								<el-button type="danger" icon="el-icon-delete" plain></el-button>
 							</el-button-group>
 						</el-col>
 					</el-row>
-					<!-- <div style="width: 100%;height: 262px;">
-						<div slot="header" class="clearfix">
-							<div style="height: 200px;margin-bottom: -17px;">
-								<img style="border-radius: 20px;width: 200px;height: 200px;" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"></img>
-							</div>
-						</div>
-						<el-divider style="height: 3px;margin-top: -60px;" />
-						<div style="text-align: right;">
-							<el-button-group style="height: 80px;margin-top: -118px;margin-right: 10px;">
-								<el-button type="primary" icon="el-icon-edit" plain></el-button>
-								<el-button type="success" icon="el-icon-collection-tag" plain></el-button>
-								<el-button type="danger" icon="el-icon-delete" plain></el-button>
-							</el-button-group>
-						</div>
-					</div> -->
 				</el-card>
 			</el-col>
 		</el-row>
@@ -56,9 +41,10 @@
 
 <script>
 	export default {
+		props: ['discountGoods'],
 		data() {
 			return {
-				discountGoods: []
+				// discountGoods: []
 			};
 		},
 		mounted() {
@@ -66,8 +52,23 @@
 		},
 		methods: {
 			getallDiscountGoods() {
+				var queryproductkey = sessionStorage.getItem("queryproductkey")
+				var queryproductvalue = sessionStorage.getItem("queryproductvalue")
+				sessionStorage.removeItem("queryproductkey")
+				sessionStorage.removeItem("queryproductvalue")
+				var queryurl = "http://localhost:8080/shop/findAllGoods"
+				if (queryproductkey == "按名称查询") {
+					queryurl = "http://localhost:8080/shop/findLikeGoodsByName/" + queryproductvalue;
+				} else if (queryproductkey == "按批准文号查询") {
+					queryurl = "http://localhost:8080/shop/findLikeGoodsByShopId/" + queryproductvalue;
+				} else if (queryproductkey == "按类别查询") {
+					queryurl = "http://localhost:8080/shop/findLikeGoodsByType/" + queryproductvalue;
+				} else if (queryproductkey == "按商标查询") {
+					queryurl = "http://localhost:8080/shop/findLikeGoodsByTrademark/" + queryproductvalue;
+				}
 				var that = this;
-				this.$axios.post("http://localhost:8080/shop/findAllGoods")
+				// alert("pp  "+queryurl)
+				this.$axios.post(queryurl)
 					.then(function(res) {
 						console.log(res);
 						that.discountGoods = res.data;
@@ -76,7 +77,16 @@
 					})
 			}
 		},
-		components: {}
+		components: {
+
+		},
+		watch: {
+			info(newVal) {
+				alert(newVal)
+				// this.expandDetail = newVal;
+				console.log(this.expandDetail);
+			}
+		},
 	}
 </script>
 

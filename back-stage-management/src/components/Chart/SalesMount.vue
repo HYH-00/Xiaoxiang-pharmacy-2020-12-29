@@ -65,6 +65,7 @@
 		methods: {
 			setyear() {
 				this.year = sessionStorage.getItem("year");
+				// alert(this.year)
 			},
 			changeType: function() {
 				this.index++

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 @Data
 @Component
 public class Order {
+    private int key;
     private String userid;
     private String shopId;
     private int shopnumber;

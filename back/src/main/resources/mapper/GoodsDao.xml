@@ -60,4 +60,30 @@
     <select id="findAllGoods" resultType="Goods">
         select * from goods;
     </select>
+
+    <select id="findLikeGoodsByName"
+            resultType="Goods"
+            parameterType="String">
+        select * from goods where name LIKE "%${name}%"
+    </select>
+    <select id="findLikeGoodsByShopId"
+            resultType="Goods"
+            parameterType="String">
+        select * from goods where shopid LIKE "%${shopId}%"
+    </select>
+    <select id="findLikeGoodsByType"
+            resultType="Goods"
+            parameterType="String">
+        select * from goods where type LIKE "%${type}%"
+    </select>
+    <select id="findLikeGoodsByTrademark"
+            resultType="Goods"
+            parameterType="String">
+        select * from goods where trademark LIKE "%${trademark}%"
+    </select>
+
+    <select id="findGoodPictureByShopId" resultType="Goods">
+        select * from goods where shopid = #{shopId}
+    </select>
+
 </mapper>

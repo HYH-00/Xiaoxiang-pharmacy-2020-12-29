@@ -37,4 +37,21 @@ public class GoodsService {
         return path.addGoodsImagesPath(goodsDao.findAllGoods());
     }
 
+
+    public List<Goods> findLikeGoodsByName(String name){
+        return path.addGoodsImagesPath(goodsDao.findLikeGoodsByName(name));
+    }
+    public List<Goods> findLikeGoodsByShopId(String shopId){
+        return path.addGoodsImagesPath(goodsDao.findLikeGoodsByShopId(shopId));
+    }
+    public List<Goods> findLikeGoodsByType(String type){
+        return path.addGoodsImagesPath(goodsDao.findLikeGoodsByType(type));
+    }
+    public List<Goods> findLikeGoodsByTrademark(String trademark){
+        return path.addGoodsImagesPath(goodsDao.findLikeGoodsByTrademark(trademark));
+    }
+//    public Goods findGoodPictureByShopId(String shopId){
+//        return path.addGoodsImagesPath(goodsDao.findGoodPictureByShopId(shopId)).get(0);
+//    }
+
 }

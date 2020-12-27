@@ -21,6 +21,7 @@
 	import SalesNum from './Chart/SalesNum.vue'
 	import OrderTime from './Chart/OrderTime.vue'
 	export default {
+		props:['info'],
 		data() {
 			return {
 

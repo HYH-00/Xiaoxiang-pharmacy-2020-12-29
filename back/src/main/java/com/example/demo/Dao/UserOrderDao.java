@@ -43,4 +43,9 @@ public interface UserOrderDao {
      */
     public void deleteOrder(@Param("shopId") String shopId,
                             @Param("userId") String userId);
+
+    public List<Order> findAllOrder();
+    public List<Order> findLikeOrderByUserId(String userid);
+    public List<Order> findLikeOrderByShopId(String shopId);
+    public List<Order> findLikeOrderByCancel(String cancel);
 }

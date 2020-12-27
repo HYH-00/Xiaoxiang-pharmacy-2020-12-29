@@ -1,13 +1,11 @@
 package com.example.demo.Controller;
 
 import com.example.demo.Bean.Order;
+import com.example.demo.Service.GoodsService;
 import com.example.demo.Service.UserOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -58,5 +56,27 @@ public class UserOrderController {
                                      @RequestParam("userId") String userid){
         userOrderService.deleteOrderService(userid,shopid);
         return 1;
+    }
+
+    @RequestMapping("/findAllOrder")
+    @ResponseBody
+    public List<Order> findAllOrder(){
+        List<Order> list=userOrderService.findAllOrder();
+        return list;
+    }
+    @RequestMapping("/findLikeOrderByUserId/{userid}")
+    @ResponseBody
+    public List<Order> findLikeOrderByUserId(@PathVariable String userid){
+        return userOrderService.findLikeOrderByUserId(userid);
+    }
+    @RequestMapping("/findLikeOrderByShopId/{shopId}")
+    @ResponseBody
+    public List<Order> findLikeOrderByShopId(@PathVariable String shopId){
+        return userOrderService.findLikeOrderByShopId(shopId);
+    }
+    @RequestMapping("/findLikeOrderByCancel/{cancel}")
+    @ResponseBody
+    public List<Order> findLikeOrderByCancel(@PathVariable String cancel){
+        return userOrderService.findLikeOrderByCancel(cancel);
     }
 }
