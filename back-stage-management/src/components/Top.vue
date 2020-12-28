@@ -4,7 +4,7 @@
 			<el-menu-item index="处理中心">处理中心</el-menu-item>
 			<el-menu-item index="商品总览">商品总览</el-menu-item>
 			<el-menu-item index="订单管理">订单管理</el-menu-item>
-			<el-menu-item index="用户管理">用户管理</el-menu-item>
+			<!-- <el-menu-item index="用户管理">用户管理</el-menu-item> -->
 			<div style="float: right;width: auto;margin-top: 5px;">
 				<el-dropdown @command="handleCommand">
 					<el-col :span="12">
@@ -19,15 +19,15 @@
 					</el-col>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item command="个人信息">个人信息</el-dropdown-item>
-						<el-dropdown-item command="修改密码">修改密码</el-dropdown-item>
 						<el-dropdown-item command="退出登录">退出登录</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
 			<el-dialog title="提示" :visible.sync="infoVisible" width="30%" center>
 				<span slot="title" class="dialog-title">
-					<div>
+					<div style="font-size: 18px;">
 						管理员ID：{{info.adminId}}
+						<br />
 						<br />
 						管理员昵称：{{info.adminNick}}
 					</div>
@@ -79,4 +79,8 @@
 </script>
 
 <style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
 </style>

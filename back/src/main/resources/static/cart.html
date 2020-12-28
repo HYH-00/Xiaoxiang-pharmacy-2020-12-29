@@ -7,37 +7,155 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>购物车</title>
     <link href="css/cart.css" rel="stylesheet">
+    <script src="js/jquery-3.4.1.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
 
 <body>
-    <!-- 头部 -->
-    <div class="header">nihdsiasd</div>
-    <div class="wrap">
-        <ul class="top">
-            <li><input type="checkbox" class="checall">全选</li>
-            <li>单价</li>
-            <li>数量</li>
-            <li>小计(元)</li>
-            <li>编辑</li>
-        </ul>
-        <ul class="main">
-        </ul>
-        <div class="footer">
-            <div class="footer-check">
-                <div><input type="checkbox" class="checall">全选</div>
-                <div class="delall">删除选中的商品</div>
-                <div>共<b class="goods">0</b>件商品</div>
-                <div>已选择<b class="goodsnum">0</b>件</div>
+<!-- 头部 -->
+<div class="header"></div>
+<div class="wrap">
+    <ul class="top">
+        <li><input type="checkbox" class="checall">全选</li>
+        <li>单价</li>
+        <li>数量</li>
+        <li>小计(元)</li>
+        <li>编辑</li>
+    </ul>
+    <ul class="main">
+    </ul>
+    <div class="footer">
+        <div class="footer-check">
+            <div><input type="checkbox" class="checall">全选</div>
+            <div class="delall">删除选中的商品</div>
+            <div>共<b class="goods">0</b>件商品</div>
+            <div>已选择<b class="goodsnum">0</b>件</div>
+        </div>
+        <div class="footer-count">
+            <div>合计(不含运费):
+                <div class="price">￥0.00</div>
             </div>
-            <div class="footer-count">
-                <div>合计(不含运费):<div class="price">￥0.00</div>
-                </div>
-                <div>去结算</div>
-            </div>
+            <div>去结算</div>
         </div>
     </div>
+</div>
+<div id="payment">
+<!--    确定价格-->
+    <el-dialog
+            title="确认价格"
+            :visible.sync="centerDialogVisible"
+            width="30%"
+            center>
+        <span>需支付：{{price}}</span>
+        <span slot="footer" class="dialog-footer">
+                    <el-button @click="centerDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="balanceInquiryAndModification()">确 定</el-button>
+                </span>
+    </el-dialog>
+<!--    支付弹窗-->
+    <el-dialog
+            title="支付成功"
+            :visible.sync="payVisible"
+            width="30%"
+            center>
+        <span>支付成功！请移步订单管理修改配送地址！</span>
+        <span slot="footer" class="dialog-footer">
+                    <el-button @click="payVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="paySuccess()">确 定</el-button>
+                </span>
+    </el-dialog>
+    <el-dialog
+            title="支付失败"
+            :visible.sync="PaymentFailed"
+            width="30%"
+            center>
+        <span>余额不足，请充值！</span>
+        <span slot="footer" class="dialog-footer">
+                    <el-button @click="PaymentFailed = false">取 消</el-button>
+                    <el-button type="primary" @click="PaymentFailed = false">确 定</el-button>
+                </span>
+    </el-dialog>
+</div>
+<script src="js/cart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    var count = document.querySelector(".footer-count").querySelectorAll("div")[2];
+    var payment = new Vue({
+        el: '#payment',
+        data: {
+            centerDialogVisible: false,
+            payVisible:false,
+            PaymentFailed:false,
+            price:'',
+            payYesOrNot:'',
+            payTitle:''
+        },
+        methods: {
+            balanceInquiryAndModification:function () {
+                this.centerDialogVisible = false
+                var that = this
+                //进行用户余额验证
+                axios.get("http://localhost:8080/shop/pay",{
+                    params:{
+                        "name":window.localStorage.getItem("username"),
+                        "pay":str
+                    }
+                })
+                .then(function (data) {
+                    if(data.data){
+                        that.title = "花费："+str
+                        that.payVisible = true
+                        // fundelAll();
+                    }else{
+                        //余额不足弹出充值窗口
+                        that.PaymentFailed = true
+                    }
+                })
+            },
+            paySuccess: async function () {
+                this.payVisible = false
+                console.log(cartList)
+                for (var i=0;i<cartList.length;i++){
+                    cartList[i].userid = window.localStorage.getItem("username")
+                }
+                console.log(cartList)
+                 await axios.post("http://localhost:8080/shop/addOrder",cartList)
+                .then(function (data) {
+                    console.log(data.data)
+                })
+                // sleep(1000)
+                fundelAll()
+                window.location.assign("userOrder.html");
+            }
+        }
+    })
+    //结算提示
+    count.addEventListener("click", () => {
+        var usevalue = window.localStorage.getItem("username");
+        payment.price = str+"元"
+        if (usevalue == null || usevalue.length <= 0) {
+            alert("请先登录，将跳转到登录界面");
+            window.location.assign("login.html");//跳转到下一个页面
+        } else {
+            payment.centerDialogVisible=true
+        }
 
-    <script src="js/cart.js"></script>
+    });
+    //睡眠函数
+    function sleep(numberMillis) {
+        var now = new Date();
+        var exitTime = now.getTime() + numberMillis;
+        while (true) {
+            now = new Date();
+            if (now.getTime() > exitTime)
+                return;
+        }
+    }
+</script>
 </body>
 
 </html>

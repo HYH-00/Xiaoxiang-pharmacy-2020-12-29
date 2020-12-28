@@ -33,24 +33,74 @@
         </el-option>
     </el-select>
     </el-tooltip><br><br>
-    <ve-pie :data="chartData"></ve-pie>
+    <ve-pie :data="chartData" :settings="{
+        limitShowNum: 4
+      }"></ve-pie>
     </div>
-    <div style="margin-right: 150px;float: left">
+    <div style="margin-right: 110px;float: left">
         <ul>
-            <li>用户名： XXXX</li><br>
-            <li>密码： XXXX</li>
-            <li>余额： XXXX</li><br>
-            <li>总计购买商品： XXXX</li>
+            <li>用户名： {{name}}</li><br>
+            <li>密码：
+                <el-tooltip content="是否修改密码？" placement="bottom" effect="light">
+                 <el-button type="text" style="font-size: larger" @click="dialogFormVisible = true">********</el-button></el-tooltip>
+            </li><br>
+            <li>余额： {{userBalance}}</li><br>
+            <li>总计购买商品： {{allNumber}}</li><br>
+            <el-table
+                    :header-cell-style="{background:'#FFF5E7'}"
+                    :cell-style="{background:'#FFF5E7'}"
+                    :data="tableData"
+                    @row-click="handle"
+                    style="width: 230px">
+                <el-table-column
+                        prop="data"
+                        label="最近浏览的商品："
+                        width="230px">
+                </el-table-column>
+            </el-table>
         </ul>
     </div>
     <div style="margin-right: 0px;text-align: center">
-        <p>商 品 词 云 分 析</p>
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="goodsImages/wy.png">
+        <p style="margin-right: 0px">商 品 词 云 分 析</p>
+        <img src="goodsImages/wy.png" height="420">
     </div>
+
+    <el-dialog title="收货地址" :visible.sync="dialogFormVisible" width="30%">
+        <el-dialog
+                width="30%"
+                title="请确认密码输入正确"
+                :visible.sync="innerVisible1"
+                append-to-body>
+        </el-dialog>
+        <el-dialog
+                width="30%"
+                title="修改密码成功"
+                :visible.sync="innerVisible2"
+                append-to-body>
+        </el-dialog>
+        <el-form :model="form">
+            <el-form-item label="旧密码" :label-width="formLabelWidth">
+                <el-input v-model="form.oldPassword" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="新密码" :label-width="formLabelWidth">
+                <el-input v-model="form.newPassword" autocomplete="off"  show-password></el-input>
+            </el-form-item>
+            <el-form-item label="确认密码" :label-width="formLabelWidth">
+                <el-input v-model="form.Intermediate" autocomplete="off"  show-password></el-input>
+            </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button type="primary" @click="changePassword()">确 定</el-button>
+        </div>
+    </el-dialog>
 </div>
 <div class="mybtn">
-    <div class="centerfooter-btn"><a href="index.html">返回首页</a></div>
+    <div class="centerfooter-btn">
+        <a href="index.html">返回首页</a>
+    </div>
 </div>
+
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -62,8 +112,11 @@
     //获得一个购物车缓存区
     var tmpCartList = window.localStorage.getItem("cartlist");
     tmpCartList = JSON.parse(tmpCartList)
-    //获取缓存区的用户
+    //获取缓存区的用户浏览商品缓存区
+    var recentlyViewed = window.localStorage.getItem("recentlyViewed")
+    recentlyViewed = JSON.parse(recentlyViewed)
     var userLocal = window.localStorage.getItem("username");
+    //获取最近
     //用于购物车
     var shopcar = new Vue({
         el: "#ap",
@@ -92,12 +145,82 @@
                 value: '展示总支出与总折扣比例',
                 label: '支出与折扣',
             }],
+            tableData: [],
             value: '展示每一类型商品的购买数量比例',
+            userBalance:'',
+            name:'',
+            allNumber:0,
+            dialogFormVisible:false,
+            innerVisible1:false,
+            innerVisible2:false,
+            form: {
+                oldPassword: '',
+                newPassword: '',
+                Intermediate:''
+            },
+            formLabelWidth: '120px'
         },
         mounted: async function () {
+            console.log(recentlyViewed)
+            var temp=[]
+            var info={}
+            for(var i=0;i<recentlyViewed.length;i++){
+                info={
+                    "data":recentlyViewed[i].shopId+" "+recentlyViewed[i].name
+                }
+                temp[i]=info
+            }
+            this.tableData = temp
+            this.name = userLocal
             await this.retrieveData()
+            await this.balance()
+            this.shopCount()
         },
         methods: {
+            //浏览跳转
+            handle:function(row,event,column){
+                shopid = row.data.slice(0,9)
+                url = "ProductShowcase.html?shopId="+shopid//此处拼接内容
+                window.location.href = url;
+            },
+            //修改密码
+            changePassword:function(){
+                this.dialogFormVisible = false
+                //判断两次密码输入是否正确
+                if(this.form.newPassword === this.form.Intermediate){
+                    //再次判断老密码是否正确
+                    var that = this
+                    axios.get("http://localhost:8080/shop/changePassword",{
+                        params:{
+                            "password":that.form.oldPassword,
+                            "userid":that.name,
+                            "newPassword":that.form.newPassword
+                        }
+                    })
+                    .then(function (data) {
+                        //如果不正确弹窗提示
+                        if(!data.data){
+                            that.innerVisible1 = true
+                        }else{
+                            that.innerVisible2 = true
+                            that.form.oldPassword=''
+                            that.form.Intermediate=''
+                            that.form.newPassword=''
+                        }
+                    })
+                }else{
+                    //如果不一样，弹窗提示
+                    that.innerVisible1 = true
+                }
+            },
+            //计算总购物数量
+            shopCount:function(){
+                var a=0
+                for(var i=0;i<this.originalData.length;i++){
+                    a+=this.originalData[i].number
+                }
+                this.allNumber = a
+            },
             //获取数据分析的数据
             retrieveData: async function () {
                 var that = this
@@ -117,6 +240,7 @@
                         }
                     })
             },
+            //描述判断
             description:function (value) {
                 console.log(value)
                 if(value === '展示每一类型商品的购买数量比例')
@@ -176,6 +300,17 @@
                 b.type="支出"
                 b.number = amount
                 this.chartData.rows.push(b)
+            },
+            balance:async function () {
+                var that = this
+                await axios.get("http://localhost:8080/shop/userBalance",{
+                    params:{
+                        "userid":userLocal
+                    }
+                })
+                .then(function (data) {
+                    that.userBalance = Math.round(data.data*100)/100
+                })
             }
         }
     })

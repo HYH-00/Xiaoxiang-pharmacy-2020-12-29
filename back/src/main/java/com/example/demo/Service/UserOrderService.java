@@ -4,6 +4,7 @@ import com.example.demo.Bean.Goods;
 import com.example.demo.Bean.Order;
 import com.example.demo.Dao.UserOrderDao;
 import com.example.demo.Other.AddPath;
+import com.sun.org.apache.xpath.internal.operations.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,8 +41,8 @@ public class UserOrderService {
      * @param address 修改地址
      * @param cancel 是否确认到货
      */
-    public void modifyAddressService(String userId,String shopId,String address,String cancel,int number){
-        userOrderDao.modifyAddress(userId, shopId, address,cancel);
+    public void modifyAddressService(String userId,String shopId,String address,String cancel,int number,int key){
+        userOrderDao.modifyAddress(userId, shopId, address,cancel,key);
         if(!cancel.equals("air"))
             userOrderDao.ModifyInventory(shopId, number);
     }
@@ -51,14 +52,24 @@ public class UserOrderService {
      * @param userId 用户编号
      * @param shopId 商品编号
      */
-    public void deleteOrderService(String userId,String shopId){
-        userOrderDao.deleteOrder(shopId,userId);
+    public void deleteOrderService(String userId,String shopId,int key){
+        userOrderDao.deleteOrder(shopId,userId,key);
+    }
+
+    /**
+     * 添加多个订单
+     * @param Orders 订单数据
+     * @return 返回插入的条数
+     */
+    public int addOrder(List<Order> Orders){
+        return userOrderDao.addOrder(Orders);
     }
 
 
-    public List<Order> findAllOrder(){
+    public List<Order> findAllOrder() {
         return userOrderDao.findAllOrder();
     }
+
     public List<Order> findLikeOrderByUserId(String userid){
         return userOrderDao.findLikeOrderByUserId(userid);
     }

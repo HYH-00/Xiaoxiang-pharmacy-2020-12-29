@@ -14,7 +14,7 @@ import java.util.UUID;
 @RestController
 @CrossOrigin
 public class FileController {
-    private String uploadPath="D:/GitDepository/gitee/JShop/productImage";
+    private String uploadPath="F:\\shop\\JShop\\JShop\\productImage";
     FileController(){
 //        uploadPath="";
 //        File directory = new File("");//参数为空

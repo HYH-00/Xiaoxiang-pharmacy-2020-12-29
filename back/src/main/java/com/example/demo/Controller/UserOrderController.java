@@ -3,6 +3,7 @@ package com.example.demo.Controller;
 import com.example.demo.Bean.Order;
 import com.example.demo.Service.GoodsService;
 import com.example.demo.Service.UserOrderService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -45,17 +46,39 @@ public class UserOrderController {
                                         @RequestParam("address") String address,
                                         @RequestParam("shopid") String shopid,
                                        @RequestParam("cancel") String cancel,
-                                       @RequestParam("number") int number){
-        userOrderService.modifyAddressService(userid, shopid, address,cancel,number);
+                                       @RequestParam("number") int number,
+                                       @RequestParam("key") int key){
+        userOrderService.modifyAddressService(userid, shopid, address,cancel,number,key);
         return 1;
     }
 
+    /**
+     * 删除订单
+     * @param shopid 商品编号
+     * @param userid 用户编号
+     * @return 返回结果
+     */
     @RequestMapping("/deleteOrder")
     @ResponseBody
     public int deleteOrderController(@RequestParam("shopId") String shopid,
-                                     @RequestParam("userId") String userid){
-        userOrderService.deleteOrderService(userid,shopid);
+                                     @RequestParam("userId") String userid,
+                                     @RequestParam("key") int key){
+        userOrderService.deleteOrderService(userid,shopid,key);
         return 1;
+    }
+
+    /**
+     * 添加多条订单数据
+     * @param order 点单数据
+     * @return 返回插入条数
+     */
+    @ResponseBody
+    @RequestMapping("/addOrder")
+    public int addOrderController(@RequestBody List<Order> order){
+        for (Order order1 : order){
+            System.out.println(order1.toString());
+        }
+        return userOrderService.addOrder(order);
     }
 
     @RequestMapping("/findAllOrder")

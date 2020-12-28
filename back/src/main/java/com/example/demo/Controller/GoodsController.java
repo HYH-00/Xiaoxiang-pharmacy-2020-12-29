@@ -90,4 +90,17 @@ public class GoodsController {
 //    public Result findGoodPictureByShopId(@PathVariable String shopId){
 //        return Result.ok().put("data",goodsService.findGoodPictureByShopId(shopId).get(0));
 //    }
+ @RequestMapping("deleteGoodPictureByShopId/{shopId}")
+ @ResponseBody
+ public int deleteGoodPictureByShopId(@PathVariable String shopId){
+    return goodsService.deleteGoodPictureByShopId(shopId);
+}
+
+    @RequestMapping("updateGoodsByShopId")
+    @ResponseBody
+    public int updateGoodsByShopId(@RequestBody Goods goods){
+//        System.out.println("---");
+        return goodsService.updateGoodsByShopId(goods);
+    }
+
 }

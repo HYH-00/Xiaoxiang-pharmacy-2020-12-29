@@ -1,5 +1,6 @@
 package com.example.demo.Other;
 
+import com.example.demo.DemoApplication;
 import com.kennycason.kumo.CollisionMode;
 import com.kennycason.kumo.WordCloud;
 import com.kennycason.kumo.WordFrequency;
@@ -10,6 +11,7 @@ import com.kennycason.kumo.font.scale.SqrtFontScalar;
 import com.kennycason.kumo.nlp.FrequencyAnalyzer;
 import com.kennycason.kumo.nlp.tokenizers.ChineseWordTokenizer;
 import com.kennycason.kumo.palette.LinearGradientColorPalette;
+import org.springframework.boot.SpringApplication;
 
 import java.awt.*;
 import java.io.IOException;
@@ -27,7 +29,7 @@ public class WordCloud1 {
 //指定文本文件路径，生成词频集合
         final List<WordFrequency> wordFrequencyList = frequencyAnalyzer.load("F:\\shop\\JShop\\back\\src\\main\\resources\\static\\txt\\wordcloud.txt");
 //设置图片分辨率
-        Dimension dimension = new Dimension(500,600);
+        Dimension dimension = new Dimension(400,400);
 //此处的设置采用内置常量即可，生成词云对象
         WordCloud wordCloud = new WordCloud(dimension, CollisionMode.PIXEL_PERFECT);
         //设置边界及字体
@@ -48,7 +50,7 @@ public class WordCloud1 {
         wordCloud.writeToFile("F:\\shop\\JShop\\back\\src\\main\\resources\\static\\goodsImages/wy.png");
     }
     public static void main(String[] args) throws IOException {
-        WordCloud1 wordCloud1 = new WordCloud1();
-        wordCloud1.creatWordCloud();
+       WordCloud1 wordCloud1 = new WordCloud1();
+       wordCloud1.creatWordCloud();
     }
 }

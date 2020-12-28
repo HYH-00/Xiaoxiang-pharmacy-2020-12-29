@@ -74,7 +74,7 @@
                     <template slot-scope="scope">
                         <el-popover placement="top-start" title="商品图片" trigger="hover">
                             <img slot="reference" :src="scope.row.goods.picture" style="width: 150px;height: 110px">
-                            <img :src="scope.row.goods.picture" alt="" style="width:100%;height: 100%">
+                            <img :src="scope.row.goods.picture" alt="" style="width:280px;height: 280px">
                         </el-popover>
                     </template>
                 </el-table-column>
@@ -258,6 +258,7 @@
                 var that = this
                 axios.get("http://localhost:8080/shop/modifyAddress",{
                     params:{
+                        "key":that.tableData[index].userId,
                         "userid":that.tableData[index].userid,
                         "shopid":that.tableData[index].shopId,
                         "address":"air",
@@ -273,6 +274,7 @@
                     params:{
                         "shopId": row.shopId,
                         "userId": row.userid,
+                        "key":row.key
                     }
                 })
                 this.tableData.splice(index,1)
@@ -288,6 +290,7 @@
                     this.tableData[this.form.index].address = this.form.area+this.form.address
                 axios.get("http://localhost:8080/shop/modifyAddress",{
                     params:{
+                        "key":that.tableData[that.form.index].key,
                         "userid":that.tableData[that.form.index].userid,
                         "shopid":that.tableData[that.form.index].shopId,
                         "address":that.tableData[that.form.index].address,

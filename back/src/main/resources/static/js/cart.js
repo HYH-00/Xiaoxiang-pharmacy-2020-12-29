@@ -1,7 +1,6 @@
 var countPrice = document.querySelector(".price");
 var Tagtop = document.querySelector(".top");
 var main = document.querySelector(".main");
-var count = document.querySelector(".footer-count").querySelectorAll("div")[2];
 var goods = document.querySelector(".goods");
 var checall = document.querySelectorAll(".checall");
 var goodsnum = document.querySelector(".goodsnum");
@@ -282,23 +281,6 @@ function checkedAll() {
 }
 
 
-//结算提示
-count.addEventListener("click", () => {
-    var countp = prompt("确认支付", str + "元");
-    var usevalue = window.localStorage.getItem("username");
-    if (usevalue == null || usevalue.length <= 0) {
-        alert("请先登录，将跳转到登录界面");
-        window.location.assign("login.html");//跳转到下一个页面
-    } else {
-        if (countp) {
-            alert("支付成功");
-            fundelAll();
-        } else {
-            alert("支付失败");
-        }
-    }
-
-});
 
 
 //更新缓存

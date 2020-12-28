@@ -18,7 +18,7 @@
 						<el-row :gutter="0" style="text-align: center;">
 							<el-upload class="upload-demo" drag limit="1" :on-success="handlesuccess" action="http://localhost:8080/shop/fileupload"
 							 multiple ref='upload' :file-list="addproductimgList">
-								<i class="el-icon-upload"></i>
+								<i class="el-icon-upload" style="height: 300px;"></i>
 								<div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
 								<div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
 							</el-upload>
@@ -136,17 +136,37 @@
 					<el-button type="primary" @click="queryorderYes">确 定</el-button>
 				</span>
 			</el-dialog>
-			<el-dialog title="密码重置" :visible.sync="queryorder" width="30%" :before-close="queryorderhandleClose">
-				<el-form style="text-align: center;" ref="form" :model="rasswordresetfrom" label-width="80px">
+			<el-dialog title="密码重置" :visible.sync="rasswordreset" width="30%" :before-close="queryorderhandleClose">
+				<el-form style="text-align: center;" ref="form" :model="rasswordresetfrom" label-width="100px">
 					<el-form-item style="width: 300px;margin-left: 50px;" label="重置的用户ID">
 						<el-input v-model="rasswordresetfrom.value"></el-input>
 					</el-form-item>
 				</el-form>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button @click="initqueryorderfrom">重 置</el-button>
-					<el-button @click="queryorderNo">取 消</el-button>
-					<el-button type="primary" @click="queryorderYes">确 定</el-button>
+					<el-button @click="rasswordresetNo">取 消</el-button>
+					<el-button type="primary" @click="rasswordresetYes">确 定</el-button>
+				</span>
+			</el-dialog>
+			<el-dialog title="用户查询" :visible.sync="queryuser" width="30%" :before-close="queryuserhandleClose">
+				<el-form style="text-align: center;" ref="form" :model="queryuserfrom" label-width="100px">
+					<el-form-item style="width: 300px;margin-left: 50px;" label="查询的用户ID">
+						<el-input v-model="queryuserfrom.id"></el-input>
+					</el-form-item>
+					<el-form-item style="width: 300px;margin-left: 50px;" label="用户密码">
+						<el-input disabled="true" v-model="queryuserfrom.password"></el-input>
+					</el-form-item>
+					<el-form-item style="width: 300px;margin-left: 50px;" label="用户余额">
+						<el-input disabled="true" v-model="queryuserfrom.balance"></el-input>
+					</el-form-item>
+					<el-form-item style="width: 300px;margin-left: 50px;" label="电话号码">
+						<el-input disabled="true" v-model="queryuserfrom.tel"></el-input>
+					</el-form-item>
+				</el-form>
+				</el-form>
+				<span slot="footer" class="dialog-footer">
+					<el-button @click="queryuserNo">取 消</el-button>
+					<el-button type="primary" @click="queryuserYes">确 定</el-button>
 				</span>
 			</el-dialog>
 		</el-container>
@@ -185,7 +205,9 @@
 				addproduct: false,
 				queryproduct: false,
 				queryorder: false,
+				queryuser: false,
 				loading: false,
+				rasswordreset: false,
 				addproductimgList: [],
 				addform: {
 					imgurl: '',
@@ -235,6 +257,12 @@
 				},
 				rasswordresetfrom:{
 					value:''
+				},
+				queryuserfrom:{
+					id:'',
+					password:'',
+					balance:'',
+					tel:''
 				}
 			};
 		},
@@ -262,8 +290,14 @@
 				else if (data == "商品查询") this.queryproduct = true;
 				else if (data == "订单查询") this.queryorder = true;
 				
-				else if (data == "密码重置") this.queryorder = true;
-				else if (data == "用户查询") this.queryorder = true;
+				else if (data == "密码重置") this.rasswordreset = true;
+				else if (data == "用户查询"){
+					this.queryuser = true;
+					this.queryuserfrom.id='';
+					this.queryuserfrom.password='';
+					this.queryuserfrom.balance='';
+					this.queryuserfrom.tel='';
+				}
 				
 			},
 			handleClose(done) {
@@ -468,6 +502,42 @@
 					}).catch(function(err) {
 						console.log(err);
 					})
+			},
+			rasswordresetNo(){
+				this.rasswordreset=false;
+			},
+			rasswordresetYes(){
+				this.rasswordreset=false;
+				var that=this;
+				this.$axios.post("http://localhost:8080/shop/rasswordreset/"+that.rasswordresetfrom.value)
+				.then(function(res){
+					console.log(res.data);
+					if(res.data=="成功"){
+						this.$message("重置成功")
+					}else{
+						this.$message("用户名不存在")
+					}
+				}).catch(function(err){
+					console.log(err)
+				})
+			},
+			queryuserNo(){
+				this.queryuser=false;
+			},
+			queryuserYes(){
+				var that =this;
+				// alert(this.queryuserfrom.id)
+				this.$axios.post("http://localhost:8080/shop/queryuserbyid/"+this.queryuserfrom.id)
+				.then(function(res){
+					// console.log(res.data);
+					// // alert(res.data.password)
+					that.queryuserfrom.password=res.data.data.password;
+					that.queryuserfrom.balance=res.data.data.balance;
+					that.queryuserfrom.tel=res.data.data.tel;
+				}).catch(function(err){
+					alert("error")
+					console.log(err);
+				})
 			}
 
 		},

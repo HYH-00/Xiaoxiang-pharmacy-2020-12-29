@@ -38,4 +38,8 @@ public interface GoodsDao {
     public List<Goods> findLikeGoodsByTrademark(String trademark);
 
     public List<Goods> findGoodPictureByShopId(String shopId);
+
+    public int deleteGoodPictureByShopId(String shopId);
+
+    public int updateGoodsByShopId(Goods goods);
 }

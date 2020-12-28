@@ -85,5 +85,12 @@
     <select id="findGoodPictureByShopId" resultType="Goods">
         select * from goods where shopid = #{shopId}
     </select>
+    <delete id="deleteGoodPictureByShopId">
+        delete from goods where shopid=#{shopId}
+    </delete>
+
+    <update id="updateGoodsByShopId" parameterType="Goods">
+        update goods set price=#{price},name=#{name},description=#{description},number=#{number},trademark=#{trademark},validPeriod=#{validPeriod},packingSpecification=#{packingSpecification},manufacturer=#{manufacturer},type=#{type} where shopid=#{shopId}
+    </update>
 
 </mapper>

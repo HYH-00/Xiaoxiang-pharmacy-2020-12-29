@@ -26,7 +26,8 @@ public interface UserOrderDao {
     public void modifyAddress(@Param("userId") String userId,
                               @Param("shopId") String shopId,
                               @Param("address") String address,
-                              @Param("cancel") String cancel);
+                              @Param("cancel") String cancel,
+                              @Param("key") int key);
 
     /**
      * 通过用户与商品编号，在确认收货以后减少库存量
@@ -42,7 +43,15 @@ public interface UserOrderDao {
      * @param userId 用户编号
      */
     public void deleteOrder(@Param("shopId") String shopId,
-                            @Param("userId") String userId);
+                            @Param("userId") String userId,
+                            @Param("key") int key);
+
+    /**
+     * 用于多条订单添加
+     * @param items 订单数据
+     * @return 返回插入结果
+     */
+    public int addOrder(@Param("items") List<Order> items);
 
     public List<Order> findAllOrder();
     public List<Order> findLikeOrderByUserId(String userid);

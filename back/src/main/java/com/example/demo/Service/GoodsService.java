@@ -33,11 +33,9 @@ public class GoodsService {
         return goodsDao.insertGoods(goods);
     }
 
-    public List<Goods> findAllGoods(){
+    public List<Goods> findAllGoods() {
         return path.addGoodsImagesPath(goodsDao.findAllGoods());
     }
-
-
     public List<Goods> findLikeGoodsByName(String name){
         return path.addGoodsImagesPath(goodsDao.findLikeGoodsByName(name));
     }
@@ -53,5 +51,11 @@ public class GoodsService {
 //    public Goods findGoodPictureByShopId(String shopId){
 //        return path.addGoodsImagesPath(goodsDao.findGoodPictureByShopId(shopId)).get(0);
 //    }
+public int deleteGoodPictureByShopId(String shopId){
+    return goodsDao.deleteGoodPictureByShopId(shopId);
+}
+    public int updateGoodsByShopId(Goods goods){
+        return goodsDao.updateGoodsByShopId(goods);
+    }
 
 }

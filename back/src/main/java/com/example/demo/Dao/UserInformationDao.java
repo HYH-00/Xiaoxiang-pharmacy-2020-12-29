@@ -1,10 +1,10 @@
 package com.example.demo.Dao;
 
 import com.example.demo.Bean.GoodsTypeNumber;
+import com.example.demo.Bean.User;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-
 import java.util.List;
 
 @Mapper
@@ -33,4 +33,41 @@ public interface UserInformationDao {
      */
     @Select("select balance from user where name = #{userid}")
     public double userBalance(String userid);
+
+    /**
+     * 修改密码
+     * @param oldPassword 旧密码
+     * @param name 用户名
+     */
+    @Update("update user set password = #{password} where name = #{name}")
+    public void changePassword(@Param("password") String oldPassword,@Param("name") String name);
+
+    /**
+     * 余额查询
+     * @param name 用户名
+     * @return 返回余额
+     */
+    @Select("select balance from user where name = #{name}")
+    public double queryBalance(String name);
+
+    /**
+     * 修改余额
+     * @param name 用户名
+     * @param pay 花费
+     * @return 返回修改列
+     */
+    @Update("update user set balance = balance-#{pay} where name = #{name}")
+    public int changeBalance(@Param("name") String name,@Param("pay") double pay);
+
+    /**
+     *
+     */
+    @Insert("insert into user values(#{name},#{password},#{balance},#{tel})")
+    public int addUser(User user);
+
+    @Update("update user set password='e10adc3949ba59abbe56e057f20f883e' where id= #{userid}")
+    public int rasswordreset(String userid);
+
+    @Select("select * from user where name=#{userid}")
+    public List<User> queryuserbyid(String userid);
 }
